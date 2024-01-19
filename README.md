@@ -1,2 +1,2 @@
 # pgbin-build
-Building our Postgres Binaries and Extensions from Source
+Building our pgEdge Postgres Binaries and Extensions from Source
