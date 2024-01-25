@@ -1,3 +1,5 @@
+#!/bin/bash
+cd "$(dirname "$0")"
 
 if [ "$IN" == "" ]; then
   echo "ERROR: Missing \$IN environment variable"
@@ -11,14 +13,14 @@ if [ ! "$rc" == "0" ]; then
   exit 1
 fi
 
-pull=$DEVEL/util/in/pull-s3.sh
-if [ "$CT" == "" ] || [ ! -f "$pull" ]; then
+pull=$PWD/in/pull-s3.sh
+if [ ! -f "$pull" ]; then
   echo "ERROR: missing pull file \"$pull\""
   exit 1
 fi
 
 cd $IN
-cp $DEVEL/util/in/pull-s3.sh .
+cp $pull .
 ./pull-s3.sh
 chmod 755 *.sh
 
