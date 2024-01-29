@@ -27,9 +27,10 @@ if [ $uname == 'Linux' ]; then
     yum="dnf --skip-broken -y install"
     PLATFORM=`cat /etc/os-release | grep PLATFORM_ID | cut -d: -f2 | tr -d '\"'`
     echo "## $PLATFORM ##"
-    sudo $yum git net-tools wget curl zip sqlite bzip2 which
+    sudo $yum git net-tools wget curl pigz sqlite which zip bzip2
+
     sudo $yum cpan
-    sudo cpan FindBin
+    echo yes | sudo cpan FindBin
     sudo cpan IPC::Run
     sudo $yum epel-release
 
@@ -63,6 +64,7 @@ if [ $uname == 'Linux' ]; then
       sudo $yum java-17-openjdk-devel
       if [ "$PLATFORM" == "el8" ]; then
         sudo $yum python39 python39-devel
+        sudo dnf -y remove python311
       else
 	sudo $yum python3-devel
       fi 
@@ -71,7 +73,10 @@ if [ $uname == 'Linux' ]; then
         sudo $yum geos-devel proj-devel gdal
       fi
 
-      curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+      curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs > install-rust.sh 
+      chmod 755 install-rust.sh
+      ./install-rust.sh -y
+      rm install-rust.sh
 
       sudo yum install -y ghc
       curl -sSL https://get.haskellstack.org/ | sh
