@@ -91,21 +91,21 @@ function cleanUpComponentDir {
 
 
 function  packageComponent {
-	bundle="$targetDir/$workDir/$componentBundle.tar.bz2"
+	bundle="$targetDir/$workDir/$componentBundle.tgz"
 	echo "$bundle"
 
 	cd "$baseDir/$workDir/build/"
-	tar -cjf "$componentBundle.tar.bz2" $componentBundle
+	tar -I pigz -cf "$componentBundle.tgz" $componentBundle
 	rm -rf "$targetDir/$workDir"
 	mkdir -p "$targetDir/$workDir"
-	mv "$componentBundle.tar.bz2" "$targetDir/$workDir/"
+	mv "$componentBundle.tgz" "$targetDir/$workDir/"
 
 	if [ "$copyBin" == "true" ]; then
 		cp -pv $bundle $IN/postgres/$compDir/.
 	elif [ "$noTar" == "true" ]; then
 		echo "NO TAR"
 		cd $targetDir/$workDir/
-		tar -xvf $componentBundle.tar.bz2
+		tar -I pigz -xf $componentBundle.tgz
 		echo "cd $targetDir/$workDir/$componentBundle/lib/postgresql"
 	fi
 
@@ -148,22 +148,22 @@ function updateSharedLibs {
 	lib64=/usr/lib64
 	shared_lib=$buildLocation/lib
         if [ "$comp" == "mongofdw" ]; then
-          cp -Pv $lib64/libmongo*.so* $shared_lib/.
-          cp -Pv $lib64/libbson*.so*  $shared_lib/.
-          cp -Pv $lib64/libicu*.so*   $shared_lib/.
+          cp -P $lib64/libmongo*.so* $shared_lib/.
+          cp -P $lib64/libbson*.so*  $shared_lib/.
+          cp -P $lib64/libicu*.so*   $shared_lib/.
         elif [ "$comp" == "mysqlfdw" ]; then
-          cp -Pv $lib64/mysql/libmysqlclient.* $shared_lib/.
+          cp -P $lib64/mysql/libmysqlclient.* $shared_lib/.
 	elif [ "$comp" == "decoderbufs" ]; then
-          cp -Pv $lib64/libproto*.so* $shared_lib/.
+          cp -P $lib64/libproto*.so* $shared_lib/.
 	elif [ "$comp" == "postgis" ]; then
-          cp -Pv $lib64/libprotobuf*.so* $shared_lib/.
-          cp -Pv $lib64/libgeos*.so*  $shared_lib/.
-          cp -Pv $lib64/libgdal*.so*  $shared_lib/.
-          cp -Pv $lib64/libproj*.so*  $shared_lib/.
-          cp -Pv $lib64/libtiff*.so*  $shared_lib/.
-          cp -Pv $lib64/libwebp.so*  $shared_lib/.
-          cp -Pv $lib64/libjbig.so*  $shared_lib/.
-          cp -Pv $lib64/libjpeg.so*  $shared_lib/.
+          cp -P $lib64/libprotobuf*.so* $shared_lib/.
+          cp -P $lib64/libgeos*.so*  $shared_lib/.
+          cp -P $lib64/libgdal*.so*  $shared_lib/.
+          cp -P $lib64/libproj*.so*  $shared_lib/.
+          cp -P $lib64/libtiff*.so*  $shared_lib/.
+          cp -P $lib64/libwebp.so*  $shared_lib/.
+          cp -P $lib64/libjbig.so*  $shared_lib/.
+          cp -P $lib64/libjpeg.so*  $shared_lib/.
         fi
 }
 
@@ -252,8 +252,8 @@ function buildComp {
         cd "$baseDir/$workDir"
         rm -rf $comp
         mkdir $comp 
-        cmd="tar -xf $src --strip-components=1 -C $comp"
-        ##echo "# $cmd"
+        cmd="tar -xzf $src --strip-components=1 -C $comp"
+        echo "# $cmd"
         $cmd
         cd $comp
 
@@ -278,10 +278,10 @@ function buildComp {
             export PYTHON_OVERRIDE=python3.9
         fi
 
-        echo "# $make ..."
-        USE_PGXS=1 $make >> $make_log 2>&1
+        echo "#  @`date`  make -j $CORES"
+        USE_PGXS=1 $make -j $CORES >> $make_log 2>&1
         if [[ $? -eq 0 ]]; then
-                echo "# make install..."
+                echo "#  @`date`  make install..."
                 USE_PGXS=1 $make_install > $install_log 2>&1
                 if [[ $? -ne 0 ]]; then
                         echo " "
@@ -411,8 +411,10 @@ function buildTimeScaleDBComponent {
 
 	cd build
         make_log=$baseDir/$workDir/logs/timescaledb_make.log
-        USE_PGXS=1 make -d > $make_log 2>&1
+        echo "#  @`date`  make -j $CORES"
+        USE_PGXS=1 make -j $CORES -d > $make_log 2>&1
         if [[ $? -eq 0 ]]; then
+                echo "#  @`date`  make install"
                 USE_PGXS=1 make install > $baseDir/$workDir/logs/timescaledb_install.log 2>&1
                 if [[ $? -ne 0 ]]; then
                         echo "timescaledb install failed, check logs for details."
@@ -429,7 +431,7 @@ function buildTimeScaleDBComponent {
         packageComponent $componentBundle
 }
 
-TEMP=`getopt -l no-tar, copy-bin,no-copy-bin,with-pgver:,with-pgbin:,build-curl:,build-hypopg:,build-postgis:,build-oraclefdw:,build-orafce:,build-audit:,build-partman:,build-pldebugger:,build-pljava:,build-plv8:,build-plprofiler:,build-backrest:,build-spock31:,build-spock32:,build-snowflake:,build-foslots:,build-pglogical:,build-hintplan:,build-timescaledb:,build-readonly:,build-cron:,build-citus:,build-vector: -- "$@"`
+TEMP=`getopt -l no-tar, copy-bin,no-copy-bin,with-pgver:,with-pgbin:,build-curl:,build-hypopg:,build-postgis:,build-oraclefdw:,build-orafce:,build-audit:,build-partman:,build-pldebugger:,build-pljava:,build-plv8:,build-plprofiler:,build-backrest:,build-spock32:,build-snowflake:,build-foslots:,build-pglogical:,build-hintplan:,build-timescaledb:,build-readonly:,build-cron:,build-citus:,build-vector: -- "$@"`
 
 if [ $? != 0 ] ; then
 	echo "Required parameters missing, Terminating..."
@@ -466,7 +468,6 @@ while true; do
     --build-repack ) buildRepack=true; Source=$2; shift; shift ;;
     --build-pglogical ) buildPgLogical=true; Source=$2; shift; shift ;;
     --build-snowflake ) buildSnowflake=true; Source=$2; shift; shift ;;
-    --build-spock31 ) buildSpock31=true; Source=$2; shift; shift ;;
     --build-spock32 ) buildSpock32=true; Source=$2; shift; shift ;;
     --build-foslots ) buildFoSlots=true; Source=$2; shift; shift ;;
     --build-hintplan ) buildHintPlan=true; Source=$2; shift; shift ;;
@@ -570,19 +571,16 @@ if [[ $buildSnowflake == "true" ]]; then
 	buildComp snowflake  "" "$snwflkV" "$snwflkBldV" "$Source"
 fi
 
-if [[ $buildSpock31 == "true" ]]; then
-	buildComp spock31  "" "$spock31V" "$spockBld31V" "$Source"
-fi
-
 if [[ $buildFoSlots == "true" ]]; then
 	buildComp foslots  "" "$foslotsV" "$foslotsBldV" "$Source"
 fi
 
 if [[ $buildSpock32 == "true" ]]; then
-	if [ "$pgVer" == "14" ]; then
-		export NO_LOG_OLD_VALUE=1
-		echo "NO_LOG_OLD_VALUE=1"
-	fi
+	## if [ "$pgVer" == "14" ]; then
+	##	export NO_LOG_OLD_VALUE=1
+	##	echo "NO_LOG_OLD_VALUE=1"
+	##
+	## fi
 	buildComp spock32  "" "$spock32V" "$spockBld32V" "$Source"
 fi
 

@@ -37,7 +37,7 @@ Usage:
 $scriptName [OPTIONS]
 
 Required Options:
-	-a      Target build location, the final tar.bz2 would be placed here
+	-a      Target build location, the final tarball is placed here
 	-t      PostgreSQL Source tar ball.
 
 Optional:
@@ -107,10 +107,12 @@ function checkPostgres {
 			pgShortV="14"
 			bndlPrfx=pg14
 			pgOPT="--with-lz4"
+
 		elif [[ "${pgSrcV/rc}" =~ ^13.* ]]; then
 			pgShortV="13"
 			bndlPrfx=pg13
 			pgOPT=""
+
 		elif [[ "${pgSrcV/rc}" =~ ^12.* ]]; then
 			pgShortV="12"
 			bndlPrfx=pg12
@@ -159,14 +161,15 @@ function buildPostgres {
 	echo "# buildPOSTGRES"	
 	cd $baseDir/$workDir/$pgSrcDir
 
-	if [ "$pgShortV" == "15" ] || [ "$pgShortV" == "16" ] || [ "$pgShortV" == "17" ]; then
+        pgS="$pgShortV"
+
+	if [ $pgS == "14" ] || [ $pgS == "15" ] || [ $pgS == "16" ] || [ $pgS == "17" ]; then
 		patcher "$DIFF1"
 		patcher "$DIFF2"
 		patcher "$DIFF3"
 	fi
 
 	mkdir -p $baseDir/$workDir/logs
-	#buildLocation="$baseDir/$workDir/build/pg$pgShortV-$pgSrcV-$pgBldV-$OS"
 	buildLocation="$baseDir/$workDir/build/$bndlPrfx-$pgSrcV-$pgBldV-$OS"
 	echo "# buildLocation = $buildLocation"
 	arch=`arch`
@@ -175,17 +178,11 @@ function buildPostgres {
 	echo "OS=$OS"
 	if [ $OS == "osx" ]; then
 		conf="$conf --without-python --without-perl"
-        elif [ $OS == "el8" ]; then
-		conf="$conf --without-python --without-perl"
-		conf="$conf --with-libxslt --with-libxml"
-		conf="$conf --with-uuid=ossp --with-gssapi --with-ldap --with-pam --enable-debug --enable-dtrace"
-		conf="$conf --with-openssl --with-systemd --enable-tap-tests"
-	else
-		conf="$conf  --with-libxslt --with-libxml"
+        else
+		conf="$conf  --with-libxslt --with-libxml --with-perl --with-python PYTHON=/usr/bin/python3.9"
 		conf="$conf --with-uuid=ossp --with-gssapi --with-ldap --with-pam --enable-debug --enable-dtrace"
 		conf="$conf --with-llvm LLVM_CONFIG=/usr/bin/llvm-config-64 --with-openssl --with-systemd --enable-tap-tests"
-		conf="$conf --with-python PYTHON=/usr/bin/python3.9"
-	fi
+        fi
 
 	gcc --version
 	echo "#  @`date`  $conf"
@@ -398,11 +395,9 @@ function createBundle {
 
 	cd $baseDir/$workDir/build
 
-	##Tar="pg$pgShortV-$pgSrcV-$pgBldV-$OS"
 	Tar="$bndlPrfx-$pgSrcV-$pgBldV-$OS"
 
-	##Cmd="tar -cjf $Tar.tar.bz2 $Tar pg$pgShortV-$pgSrcV-$pgBldV-$OS" 
-	Cmd="tar -cjf $Tar.tar.bz2 $Tar $bndlPrfx-$pgSrcV-$pgBldV-$OS" 
+	Cmd="tar -I pigz -cf $Tar.tgz $Tar $bndlPrfx-$pgSrcV-$pgBldV-$OS"
 
 	tar_log=$baseDir/$workDir/logs/tar.log
         $Cmd >> $tar_log 2>&1
@@ -413,15 +408,15 @@ function createBundle {
 		return 1
 	else
 		mkdir -p $archiveDir/$workDir
-		mv "$Tar.tar.bz2" $archiveDir/$workDir/
+		mv "$Tar.tgz" $archiveDir/$workDir/
 
 		cd /opt/pgcomponent
 		pgCompDir="pg$pgShortV"
         	rm -rf $pgCompDir
 		mkdir $pgCompDir 
-		tar -xf "$archiveDir/$workDir/$Tar.tar.bz2" --strip-components=1 -C $pgCompDir
+		tar -xf "$archiveDir/$workDir/$Tar.tgz" --strip-components=1 -C $pgCompDir
 	fi
-	tarFile="$archiveDir/$workDir/$Tar.tar.bz2"
+	tarFile="$archiveDir/$workDir/$Tar.tgz"
 	if [ "$optional" == "-c" ]; then
 		##cmd="cp -p $tarFile $IN/postgres/pg$pgShortV/."
 		cmd="cp -p $tarFile $IN/postgres/$bndlPrfx/."
