@@ -410,6 +410,7 @@ function createBundle {
 		mkdir -p $archiveDir/$workDir
 		mv "$Tar.tgz" $archiveDir/$workDir/
 
+		mkdir -p /opt/pgcomponent
 		cd /opt/pgcomponent
 		pgCompDir="pg$pgShortV"
         	rm -rf $pgCompDir

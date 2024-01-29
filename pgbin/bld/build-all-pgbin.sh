@@ -34,10 +34,14 @@ function runPgBin {
 }
 
 function export_patches {
-  dir=$PWD/spock-private
+  dir=$PWD/spock
+  if [ ! -d "$dir" ]; then
+    echo "missing SPOCK repo"
+    git clone https://github.com/pgedge/spock
+  fi
   cd $dir
 
-  git checkout main
+  git checkout REL3_2_STABLE
   git pull
 
   dp=$dir/patches

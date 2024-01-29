@@ -1,1 +1,5 @@
+builds/
 pgbin/shared
+pgbin/bld/spock/
+pgbin/202*
+pgbin/comp202*
