@@ -1,27 +1,27 @@
 #!/bin/bash
 
-spock32V=3.2dev3
+spock32V=3.2.2
 spockBld32V=1
 
-spock31V=3.1.7
+spock31V=3.1.8
 spockBld31V=1
 
 pg17V=17devel
-pg17BuildV=1
+pg17BuildV=2
 
-pg16V=16.0
+pg16V=16.1
 pg16BuildV=1
 
-pg15V=15.4
-pg15BuildV=2
+pg15V=15.5
+pg15BuildV=1
 
-pg14V=14.9
+pg14V=14.10
 pg14BuildV=1
 
-pg13V=13.12
+pg13V=13.13
 pg13BuildV=1
 
-pg12V=12.16
+pg12V=12.17
 pg12BuildV=1
 
 foslotsV=1a
@@ -30,7 +30,7 @@ foslotsBldV=1
 snwflkV=1.1
 snwflkBldV=1
 
-readonlyFullV=1.1.0
+readonlyFullV=1.1.1
 readonlyShortV=
 readonlyBuildV=1
 
@@ -46,7 +46,7 @@ odbcFullV=13.01
 odbcShortV=
 odbcBuildV=1
 
-backrestFullV=2.47
+backrestFullV=2.48
 backrestShortV=
 backrestBuildV=1
 
@@ -54,11 +54,11 @@ multicorn2FullV=2.4
 multicorn2ShortV=
 multicorn2BuildV=1
 
-citusFullV=11.2.0
+citusFullV=12.1.0
 citusShortV=
 citusBuildV=1
 
-vectorFullV=0.5.0
+vectorFullV=0.5.1
 vectorShortV=
 vectorBuildV=1
 
@@ -102,7 +102,7 @@ plv8FullV=3.2.0
 plv8ShortV=
 plv8BuildV=1
 
-debugFullV=1.5
+debugFullV=1.6
 debugShortV=
 debugBuildV=1
 
@@ -127,7 +127,7 @@ bulkloadFullV=3.1.19
 bulkloadShortV=
 bulkloadBuildV=1
 
-pgLogicalFullV=2.4.3
+pgLogicalFullV=2.4.4
 pgLogicalShortV=
 pgLogicalBuildV=1
 
@@ -148,7 +148,7 @@ timescaledbFullV=2.11.2
 timescaledbShortV=
 timescaledbBuildV=1
 
-cronFullV=1.6.0
+cronFullV=1.6.2
 cronShortV=
 cronBuildV=1
 
