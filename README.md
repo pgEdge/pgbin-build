@@ -17,5 +17,8 @@
 
 ### 7.) in setup directory run `2-pull-IN.sh` to pull in all the source binaries into the IN directory structure
 
-### 8.) cd $BLD and run the the build-all-pgbin.sh and build-all-components.sh for each pgversion and component that needs to be run
+### 8.) cd $BLD 
+        a) run `./sharedlibs.sh` the first time and each time you do incremental pg releases (after `dnf update`)
+        b) run `./build-all-pgbin.sh 16`   & `build-all-components.sh spock32 16' to confirm environment
+        c) execute build-scripts as necessary and maintain IN directory binaries via push & pull scripts
 

@@ -1,3 +1,4 @@
+build/
 builds/
 pgbin/shared
 pgbin/bld/spock/
