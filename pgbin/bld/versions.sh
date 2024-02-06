@@ -1,6 +1,6 @@
 #!/bin/bash
 
-spock32V=3.2.5beta1
+spock32V=3.2.5beta2
 spockBld32V=1
 
 pg17V=17devel2
