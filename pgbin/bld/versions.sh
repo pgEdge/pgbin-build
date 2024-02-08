@@ -43,7 +43,7 @@ odbcFullV=13.01
 odbcShortV=
 odbcBuildV=1
 
-backrestFullV=2.49
+backrestFullV=2.50
 backrestShortV=
 backrestBuildV=1
 
@@ -67,7 +67,7 @@ postgisFullV=3.4.1
 postgisShortV=
 postgisBuildV=1
 
-orafceFullV=4.5.0
+orafceFullV=4.9.2
 orafceShortV=
 orafceBuildV=1
 
@@ -95,7 +95,7 @@ plProfilerFullVersion=4.2.4
 plProfilerShortVersion=
 plprofilerBuildV=1
 
-plv8FullV=3.2.1
+plv8FullV=3.2.2
 plv8ShortV=
 plv8BuildV=1
 
