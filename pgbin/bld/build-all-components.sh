@@ -144,6 +144,10 @@ if [ "$1" == "spock32" ]; then
   build spock32 $spock32V $2  spock32
 fi
 
+if [ "$1" == "spock33" ]; then
+  build spock33 $spock33V $2  spock33
+fi
+
 if [ "$1" == "pglogical" ]; then
   build pglogical $pgLogicalFullV $2 logical
 fi

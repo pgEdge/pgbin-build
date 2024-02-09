@@ -5,6 +5,9 @@ pgSrc=$SOURCE/postgresql
 binBld=/opt/pgbin-build/builds
 source ./versions.sh
 
+SPOCK_REPO=spock-private
+SPOCK_BRANCH=main
+
 
 function runPgBin {
   ##echo "#"
@@ -34,14 +37,14 @@ function runPgBin {
 }
 
 function export_patches {
-  dir=$PWD/spock
+  dir=$PWD/$SPOCK_REPO
   if [ ! -d "$dir" ]; then
-    echo "missing SPOCK repo"
-    git clone https://github.com/pgedge/spock
+    echo "missing $SPOCK_REPO"
+    git clone https://github.com/pgedge/$SPOCK_REPO
   fi
   cd $dir
 
-  git checkout REL3_2_STABLE
+  git checkout $SPOCK_BRANCH
   git pull
 
   dp=$dir/patches
@@ -112,7 +115,8 @@ elif [ "$majorV" == "16" ]; then
 
   p1=pg16-005-log_old_value.diff
   p2=pg16-012-hidden_columns.diff
-  export_patches "$p1" "$p2"
+  p3=pg16-015-delta_apply_function.diff
+  export_patches "$p1" "$p2" "$p3"
 
 elif [ "$majorV" == "17" ]; then
   pgV=$pg17V
