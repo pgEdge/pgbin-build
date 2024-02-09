@@ -280,7 +280,9 @@ function buildComp {
 
         echo "#  @`date`  make -j $CORES"
         USE_PGXS=1 $make -j $CORES >> $make_log 2>&1
-        if [[ $? -eq 0 ]]; then
+        rc=$?
+        echo "  rc = $rc"
+        if [ "$rc" == "0" ] || [ "$comp" == "plv8" ]; then
                 echo "#  @`date`  make install..."
                 USE_PGXS=1 $make_install > $install_log 2>&1
                 if [[ $? -ne 0 ]]; then
