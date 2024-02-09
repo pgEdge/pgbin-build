@@ -1,7 +1,7 @@
 #!/bin/bash
 
 spock33V=3.3.0dev0
-spockBld33V=
+spockBld33V=1
 
 spock32V=3.2.5rc1
 spockBld32V=1
