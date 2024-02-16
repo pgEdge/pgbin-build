@@ -27,12 +27,13 @@ bcc vector
 bcc audit
 bcc hintplan
 bcc timescale
-## bcc plv8
-## bcc pljava
 bcc plprofiler
 bcc pldebugger
 bcc citus
 bcc pglogical
 bcc timescaledb
+bcc wal2json
+## bcc plv8
+## bcc pljava
 
 exit 0

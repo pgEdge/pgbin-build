@@ -84,6 +84,10 @@ if [ "$1" == "readonly" ]; then
   build readonly $readonlyFullV $2 readonly
 fi
 
+if [ "$1" == "wal2json" ]; then
+  build wal2json $wal2jV $2 wal2json
+fi
+
 if [ "$1" == "foslots" ]; then
   build foslots $foslotsV $2 foslots
 fi

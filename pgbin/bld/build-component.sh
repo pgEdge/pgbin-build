@@ -433,7 +433,7 @@ function buildTimeScaleDBComponent {
         packageComponent $componentBundle
 }
 
-TEMP=`getopt -l no-tar, copy-bin,no-copy-bin,with-pgver:,with-pgbin:,build-curl:,build-hypopg:,build-postgis:,build-oraclefdw:,build-orafce:,build-audit:,build-partman:,build-pldebugger:,build-pljava:,build-plv8:,build-plprofiler:,build-backrest:,build-spock32:,build-spock33:,build-snowflake:,build-foslots:,build-pglogical:,build-hintplan:,build-timescaledb:,build-readonly:,build-cron:,build-citus:,build-vector: -- "$@"`
+TEMP=`getopt -l no-tar, copy-bin,no-copy-bin,with-pgver:,with-pgbin:,build-curl:,build-hypopg:,build-postgis:,build-oraclefdw:,build-orafce:,build-audit:,build-partman:,build-pldebugger:,build-pljava:,build-plv8:,build-plprofiler:,build-backrest:,build-spock32:,build-spock33:,build-snowflake:,build-foslots:,build-wal2json:,build-pglogical:,build-hintplan:,build-timescaledb:,build-readonly:,build-cron:,build-citus:,build-vector: -- "$@"`
 
 if [ $? != 0 ] ; then
 	echo "Required parameters missing, Terminating..."
@@ -473,6 +473,7 @@ while true; do
     --build-spock32 ) buildSpock32=true; Source=$2; shift; shift ;;
     --build-spock33 ) buildSpock33=true; Source=$2; shift; shift ;;
     --build-foslots ) buildFoSlots=true; Source=$2; shift; shift ;;
+    --build-wal2json ) buildWal2Json=true; Source=$2; shift; shift ;;
     --build-hintplan ) buildHintPlan=true; Source=$2; shift; shift ;;
     --build-timescaledb ) buildTimeScaleDB=true; timescaleDBSource=$2; shift; shift ;;
     --build-readonly ) buildReadOnly=true; Source=$2; shift; shift ;;
@@ -572,6 +573,10 @@ fi
 
 if [[ $buildSnowflake == "true" ]]; then
 	buildComp snowflake  "" "$snwflkV" "$snwflkBldV" "$Source"
+fi
+
+if [[ $buildWal2Json == "true" ]]; then
+	buildComp wal2json  "" "$wal2jV" "$wal2jBldV" "$Source"
 fi
 
 if [[ $buildFoSlots == "true" ]]; then
