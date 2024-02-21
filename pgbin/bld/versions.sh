@@ -3,7 +3,8 @@
 spock33V=3.3.0dev0
 spockBld33V=1
 
-spock32V=3.2.6
+#spock32V=3.2.6
+spock32V=3.2.7rc1
 spockBld32V=1
 
 pg17V=17devel2
