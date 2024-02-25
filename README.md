@@ -1,17 +1,18 @@
 # PGBIN-BUILD 
 
 
-## Creating a build environment on el8 or el9
+## Creating a posix build environment
 
 ### 1.) First setup a CLI environment to be able to test (see https://github.com/pgEdge/cli)
 
-### 2.) Change the owernship of `/opt` directory to be $USER:$USER so you can write there
+### 2.) Change the owernship of `/opt` directory to so you (a non-root user) can write there
+`sudo chown $USER:$USER /opt`
 
 ### 3.) From /opt directory, run `git clone https://github.com/pgedge/pgbin-build`
 
-### 4.) The BLD & IN environment variables are setup in your .bashrc from step #1 installing the CLI
+### 4.) The BLD & IN & BUCKET environment variables are setup in your profile from step #1 installing the CLI
 
-### 5.) Configure your ~/.aws/config credentials for access to s3://pgedge-xxxxxxxx/IN
+### 5.) Configure your ~/.aws/config credentials for write access to $BUCKET
 
 ### 6.) in setup directory run `1-pgbin-build.sh` script to setup all compilation tools needed
 
