@@ -48,6 +48,7 @@ function getPGVersion {
 
 
 function prepComponentBuildDir {
+	set -x
 	buildLocation=$1
 	rm -rf $buildLocation
 	mkdir -p $buildLocation
@@ -59,7 +60,7 @@ function prepComponentBuildDir {
 	cp -r $PGHOME/include $buildLocation/
 	cp -r $PGHOME/lib/postgresql/pgxs/* $buildLocation/lib/postgresql/pgxs/
 	cp $PGHOME/lib/libpq* $buildLocation/lib/
-	cp $PGHOME/lib/libssl.so* $buildLocation/lib/
+	cp $PGHOME/lib/libssl*.so* $buildLocation/lib/
 	cp $PGHOME/lib/libpgport.a $buildLocation/lib/
 	cp $PGHOME/lib/libpgcommon.a $buildLocation/lib/
 	#cp $PGHOME/lib/libcrypt*.so* $buildLocation/lib/
@@ -95,7 +96,7 @@ function  packageComponent {
 	echo "$bundle"
 
 	cd "$baseDir/$workDir/build/"
-	tar -I pigz -cf "$componentBundle.tgz" $componentBundle
+	tar -czf "$componentBundle.tgz" $componentBundle
 	rm -rf "$targetDir/$workDir"
 	mkdir -p "$targetDir/$workDir"
 	mv "$componentBundle.tgz" "$targetDir/$workDir/"
@@ -105,7 +106,7 @@ function  packageComponent {
 	elif [ "$noTar" == "true" ]; then
 		echo "NO TAR"
 		cd $targetDir/$workDir/
-		tar -I pigz -xf $componentBundle.tgz
+		tar -xf $componentBundle.tgz
 		echo "cd $targetDir/$workDir/$componentBundle/lib/postgresql"
 	fi
 

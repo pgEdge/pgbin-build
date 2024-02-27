@@ -147,19 +147,21 @@ cronFullV=1.6.2
 cronShortV=
 cronBuildV=1
 
-PLATFORM=`cat /etc/os-release | grep PLATFORM_ID | cut -d: -f2 | tr -d '\"'`
-if [ "$PLATFORM" == "el8" ]; then
-  isEL=yes
-  isEL8=yes
-  isEL9=no
-elif [ "$PLATFORM" == "el9" ]; then
-  isEL=yes
-  isEL8=no
-  isEL9=yes
-else
-  isEL=no
-  isEL8=no
-  isEL9=no
+isEL=no
+isEL8=no
+isEL9=no
+
+if [ -f /etc/os-release ]; then
+  PLATFORM=`cat /etc/os-release | grep PLATFORM_ID | cut -d: -f2 | tr -d '\"'`
+  if [ "$PLATFORM" == "el8" ]; then
+    isEL=yes
+    isEL8=yes
+    isEL9=no
+  elif [ "$PLATFORM" == "el9" ]; then
+    isEL=yes
+    isEL8=no
+    isEL9=yes
+  fi
 fi
 
 ARCH=`arch`

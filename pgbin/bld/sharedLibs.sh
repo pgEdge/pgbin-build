@@ -1,9 +1,11 @@
 
 
 function osxCopySharedLibs {
-  lib=/opt/homebrew/lib
+  lib=/usr/local/lib
   cp -Pv $lib/liblz4*.dylib   $shared_lib/.
-  cp -Pv $lib/libzstd*.dylib $shared_lib/.
+  cp -Pv $lib/libzstd*.dylib  $shared_lib/.
+  cp -Pv $lib/libssl*.dylib   $shared_lib/.
+  cp -Pv $lib/libpq*.dylib    $shared_lib/.
 }
 
 

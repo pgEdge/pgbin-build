@@ -397,7 +397,7 @@ function createBundle {
 
 	Tar="$bndlPrfx-$pgSrcV-$pgBldV-$OS"
 
-	Cmd="tar -I pigz -cf $Tar.tgz $Tar $bndlPrfx-$pgSrcV-$pgBldV-$OS"
+	Cmd="tar -czf $Tar.tgz $Tar $bndlPrfx-$pgSrcV-$pgBldV-$OS"
 
 	tar_log=$baseDir/$workDir/logs/tar.log
         $Cmd >> $tar_log 2>&1
