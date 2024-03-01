@@ -1,6 +1,6 @@
 #!/bin/bash
 
-spock33V=3.3.0dev0
+spock33V=3.3dev1
 spockBld33V=1
 
 spock32V=3.2.7
@@ -10,10 +10,10 @@ pg17V=17devel2
 pg17BuildV=1
 
 pg16V=16.2
-pg16BuildV=2
+pg16BuildV=3
 
 pg15V=15.6
-pg15BuildV=1
+pg15BuildV=3
 
 pg14V=14.11
 pg14BuildV=1

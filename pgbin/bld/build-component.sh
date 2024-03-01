@@ -48,7 +48,6 @@ function getPGVersion {
 
 
 function prepComponentBuildDir {
-	set -x
 	buildLocation=$1
 	rm -rf $buildLocation
 	mkdir -p $buildLocation

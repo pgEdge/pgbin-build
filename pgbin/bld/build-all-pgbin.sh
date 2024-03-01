@@ -51,9 +51,13 @@ function export_patches {
   export_patch DIFF1 "$dp" "$1"
   export_patch DIFF2 "$dp" "$2"
   export_patch DIFF3 "$dp" "$3"
+  export_patch DIFF4 "$dp" "$4"
+  export_patch DIFF5 "$dp" "$5"
 
   cd ..
 }
+
+
 
 
 function export_patch {
@@ -107,7 +111,10 @@ elif [ "$majorV" == "15" ]; then
   p1=pg15-005-log_old_value.diff
   p2=pg15-010-allow_logical_decoding_on_standbys.patch
   p3=pg15-012-hidden_columns.diff
-  export_patches "$p1" "$p2" "$p3"
+  p4=pg15-015-delta_apply_function.diff
+  p5=pg15-020-LOG-to-DEBUG1.diff
+
+  export_patches "$p1" "$p2" "$p3" "$p4" "$p5"
 
 elif [ "$majorV" == "16" ]; then
   pgV=$pg16V
@@ -116,7 +123,9 @@ elif [ "$majorV" == "16" ]; then
   p1=pg16-005-log_old_value.diff
   p2=pg16-012-hidden_columns.diff
   p3=pg16-015-delta_apply_function.diff
-  export_patches "$p1" "$p2" "$p3"
+  p4=pg16-020-LOG-to-DEBUG1.diff
+
+  export_patches "$p1" "$p2" "$p3" "$p4"
 
 elif [ "$majorV" == "17" ]; then
   pgV=$pg17V
