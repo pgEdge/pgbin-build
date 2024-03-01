@@ -57,7 +57,7 @@ multicorn2FullV=2.4
 multicorn2ShortV=
 multicorn2BuildV=1
 
-citusFullV=12.1.1
+citusFullV=12.1.2
 citusShortV=
 citusBuildV=1
 
