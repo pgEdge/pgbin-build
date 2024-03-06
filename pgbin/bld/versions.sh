@@ -61,7 +61,7 @@ citusFullV=12.1.2
 citusShortV=
 citusBuildV=1
 
-vectorFullV=0.6.0
+vectorFullV=0.6.1
 vectorShortV=
 vectorBuildV=1
 
@@ -69,7 +69,7 @@ hypopgFullV=1.4.0
 hypopgShortV=
 hypopgBuildV=1
 
-postgisFullV=3.4.1
+postgisFullV=3.4.2
 postgisShortV=
 postgisBuildV=1
 
