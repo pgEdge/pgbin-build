@@ -111,6 +111,23 @@ function  packageComponent {
 
 }
 
+function fixMacOSBinary {
+  binary="$1"
+  libPathPrefix="$2"
+  rpath="$3"
+  libPathLog="$4"
+  sharedLibsPath="$sharedLibs/lib/"
+
+  otool -L "$binary" |
+	awk '/^[[:space:]]+'"$libPathPrefix"'/ {print $1}' |
+	while read lib; do
+	  install_name_tool -change "$lib" '@rpath/'$(basename "$lib") "$binary" >> "$libPathLog" 2>&1
+	done
+
+  if otool -l "$binary" | grep -A3 RPATH | grep -q "$sharedLibs"; then
+	install_name_tool -rpath "$sharedLibsPath" "$rpath" "$binary" >> "$libPathLog" 2>&1
+  fi
+}
 
 function updateSharedLibs {
         comp=$1
@@ -122,24 +139,37 @@ function updateSharedLibs {
         fi
 
         libPathLog=$baseDir/$workDir/logs/libPath.log
+        escapedBaseDir="$(echo "$baseDir" | sed 's@/@\\/@g')"
 
         if [[ -d $buildLocation/bin ]]; then
           cd $buildLocation/bin
           for file in `ls -d *` ; do
             #chrpath -r "\${ORIGIN}/../lib" "$file" >> $libPathLog 2>&1
-            chrpath -r "\${ORIGIN}/../../pg15/lib" "$file" >> $libPathLog 2>&1
+            if [ `uname` == "Darwin" ]; then
+              fixMacOSBinary "$file" "$escapedBaseDir" '@executable_path/../lib' "$libPathLog"
+            else
+              chrpath -r "\${ORIGIN}/../../pg15/lib" "$file" >> $libPathLog 2>&1
+            fi
       	  done
         fi
 
         cd $buildLocation/lib
-        for file in `ls -d *so*  2>/dev/null` ; do
-          chrpath -r "\${ORIGIN}/../lib" "$file" >> $libPathLog 2>&1
+        for file in `ls -d $suffix 2>/dev/null` ; do
+          if [ `uname` == "Darwin" ]; then
+            fixMacOSBinary "$file" "$escapedBaseDir" '@loader_path/../lib' "$libPathLog"
+          else
+            chrpath -r "\${ORIGIN}/../lib" "$file" >> $libPathLog 2>&1
+          fi
         done
 
         if [[ -d "$buildLocation/lib/postgresql" ]]; then
           cd $buildLocation/lib/postgresql
-          for file in `ls -d *so*  2>/dev/null` ; do
-            chrpath -r "\${ORIGIN}/../../lib" "$file" >> $libPathLog 2>&1
+          for file in `ls -d $suffix 2>/dev/null` ; do
+            if [ `uname` == "Darwin" ]; then
+              fixMacOSBinary "$file" "$escapedBaseDir" '@loader_path/../../lib' "$libPathLog"
+            else
+              chrpath -r "\${ORIGIN}/../../lib" "$file" >> $libPathLog 2>&1
+            fi
           done
         fi
 
