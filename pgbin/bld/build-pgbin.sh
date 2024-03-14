@@ -169,6 +169,7 @@ function buildPostgres {
 		patcher "$DIFF3"
 		patcher "$DIFF4"
 		patcher "$DIFF5"
+		patcher "$DIFF6"
 	fi
 
 	mkdir -p $baseDir/$workDir/logs

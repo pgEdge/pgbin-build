@@ -53,6 +53,7 @@ function export_patches {
   export_patch DIFF3 "$dp" "$3"
   export_patch DIFF4 "$dp" "$4"
   export_patch DIFF5 "$dp" "$5"
+  export_patch DIFF6 "$dp" "$6"
 
   cd ..
 }
@@ -113,8 +114,9 @@ elif [ "$majorV" == "15" ]; then
   p3=pg15-012-hidden_columns.diff
   p4=pg15-015-delta_apply_function.diff
   p5=pg15-020-LOG-to-DEBUG1.diff
+  p6=pg15-025-logical_commit_clock.diff
 
-  export_patches "$p1" "$p2" "$p3" "$p4" "$p5"
+  export_patches "$p1" "$p2" "$p3" "$p4" "$p5" "$p6"
 
 elif [ "$majorV" == "16" ]; then
   pgV=$pg16V
@@ -124,8 +126,9 @@ elif [ "$majorV" == "16" ]; then
   p2=pg16-012-hidden_columns.diff
   p3=pg16-015-delta_apply_function.diff
   p4=pg16-020-LOG-to-DEBUG1.diff
+  p5=pg15-025-logical_commit_clock.diff
 
-  export_patches "$p1" "$p2" "$p3" "$p4"
+  export_patches "$p1" "$p2" "$p3" "$p4" "$p5"
 
 elif [ "$majorV" == "17" ]; then
   pgV=$pg17V
