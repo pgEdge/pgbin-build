@@ -1,5 +1,8 @@
 #!/bin/bash
 
+lolorV=1.0dev1
+lolorBldV=1
+
 spock40V=4.0dev3
 spockBld40V=1
 

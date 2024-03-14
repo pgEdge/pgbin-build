@@ -148,6 +148,10 @@ if [ "$1" == "spock40" ]; then
   build spock40 $spock40V $2  spock40
 fi
 
+if [ "$1" == "lolor" ]; then
+  build lolor $lolorV $2  lolor
+fi
+
 if [ "$1" == "spock33" ]; then
   build spock33 $spock33V $2  spock33
 fi

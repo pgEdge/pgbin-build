@@ -502,6 +502,7 @@ while true; do
     --build-snowflake ) buildSnowflake=true; Source=$2; shift; shift ;;
     --build-spock33 ) buildSpock33=true; Source=$2; shift; shift ;;
     --build-spock40 ) buildSpock40=true; Source=$2; shift; shift ;;
+    --build-lolor )   buildLolor=true; Source=$2; shift; shift ;;
     --build-foslots ) buildFoSlots=true; Source=$2; shift; shift ;;
     --build-wal2json ) buildWal2Json=true; Source=$2; shift; shift ;;
     --build-hintplan ) buildHintPlan=true; Source=$2; shift; shift ;;
@@ -624,6 +625,10 @@ fi
 
 if [[ $buildSpock40 == "true" ]]; then
 	buildComp spock40  "" "$spock40V" "$spockBld40V" "$Source"
+fi
+
+if [[ $buildLolor == "true" ]]; then
+	buildComp lolor  "" "$lolorV" "$lolorBldV" "$Source"
 fi
 
 if [[ $buildPgLogical == "true" ]]; then
