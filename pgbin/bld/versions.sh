@@ -3,7 +3,7 @@
 lolorV=1.0dev1
 lolorBldV=1
 
-spock40V=4.0dev3
+spock40V=4.0dev4
 spockBld40V=1
 
 spock33V=3.3.1
