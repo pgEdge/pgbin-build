@@ -3,12 +3,14 @@
 
 ## Creating a posix build environment
 
-### 1.) First setup a CLI environment to be able to test (see https://github.com/pgEdge/cli)
+### 1.) First setup a CLI environment to be able to test
+   see https://github.com/pgEdge/cli
 
 ### 2.) Change the owernship of `/opt` directory to so you (a non-root user) can write there
 `sudo chown $USER:$USER /opt`
 
-### 3.) From /opt directory, run `git clone https://github.com/pgedge/pgbin-build`
+### 3.) From /opt directory, run 
+`git clone https://github.com/pgedge/pgbin-build`
 
 ### 4.) The BLD & IN & BUCKET environment variables are setup in your profile from step #1 installing the CLI
 
