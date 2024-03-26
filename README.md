@@ -3,6 +3,8 @@
 
 ## Creating a posix build environment
 
+Tested w Rocky Linux 8-amd, 9-arm, 9-amd & OSX arm
+
 ### 1.) First setup a CLI environment to be able to test
    see https://github.com/pgEdge/cli
 
