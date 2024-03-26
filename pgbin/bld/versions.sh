@@ -64,7 +64,7 @@ citusFullV=12.1.2
 citusShortV=
 citusBuildV=1
 
-vectorFullV=0.6.1
+vectorFullV=0.6.2
 vectorShortV=
 vectorBuildV=1
 
