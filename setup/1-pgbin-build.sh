@@ -78,8 +78,8 @@ if [ $uname == 'Linux' ]; then
       ./install-rust.sh -y
       rm install-rust.sh
 
-      sudo yum install -y ghc
-      curl -sSL https://get.haskellstack.org/ | sh
+      ## sudo yum install -y ghc
+      ## curl -sSL https://get.haskellstack.org/ | sh
     fi
   fi
 
@@ -88,12 +88,12 @@ elif [ $uname == 'Darwin' ]; then
   if [ "$SHELL" != "/bin/bash" ]; then
     chsh -s /bin/bash
   fi
-  brew --version > /dev/null 2>&1
-  rc=$?
-  if [ ! "$rc" == "0" ]; then
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  fi
-  brew install pkg-config krb5 wget curl readline lz4 openssl@1.1 openldap ossp-uuid
+  ## brew --version > /dev/null 2>&1
+  ## rc=$?
+  ## if [ ! "$rc" == "0" ]; then
+  ##   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  ## fi
+  ## brew install pkg-config krb5 wget curl readline lz4 openssl@1.1 openldap ossp-uuid
 fi
 
 cd ~/dev
