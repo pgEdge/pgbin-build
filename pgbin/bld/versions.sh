@@ -52,9 +52,9 @@ odbcFullV=13.01
 odbcShortV=
 odbcBuildV=1
 
-backrestFullV=2.50
+backrestFullV=2.51
 backrestShortV=
-backrestBuildV=4
+backrestBuildV=1
 
 multicorn2FullV=2.4
 multicorn2ShortV=
