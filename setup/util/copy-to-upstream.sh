@@ -26,12 +26,7 @@ BR=$BUCKET/REPO
 set -x
 
 aws --region $REGION s3 cp . $BR $flags
-sleep 1
-
-aws --region $REGION s3 cp versions.sql $BR/versions24.sql
-sleep 1
-aws --region $REGION s3 cp versions.sql.sha512 $BR/versions24.sql.sha512
-
 rc=$?
+
 exit $rc
 
