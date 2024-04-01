@@ -24,6 +24,8 @@ Tested w Rocky Linux 8-amd, 9-arm, 9-amd & OSX arm
 
 ### 8.) cd $BLD 
         a) run `./sharedlibs.sh` the first time and each time you do incremental pg releases (after `dnf update`)
-        b) run `./build-all-pgbin.sh 16`   & `build-all-components.sh spock32 16' to confirm environment
+        b) run `./build-all-pgbin.sh 16`   & `build-all-components.sh spock33 16' to confirm build environment
         c) execute build-scripts as necessary and maintain IN directory binaries via push & pull scripts
+
+### 9.) Enjoy.  With great power comes great responsibility.  :-)
 
