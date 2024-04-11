@@ -33,6 +33,7 @@ rm -rf $zipd
 cp -pr $repo $zipd
 rm -rf $zipd/.git
 tar czf $zipd.tar.gz $zipd
+rm -r $zipd
 
 ## copy to src directory ####
 rm -f $SOURCE/$zipd.tar.gz
@@ -48,8 +49,20 @@ git pull
 
 ## assemble the extension ####
 cd $PGE
+git checkout REL3_3_STABLE
+git pull
 rm $OUT/$comp*
 ./build_all.sh 15
 ./build_all.sh 16
 
+##copy to nightly history ####
+nightly=$HIST/up-nightly
+mkdir -p $nightly
+rm -f $nightly/*
+cp $OUT/$comp* $nightly/.
+ls -lt $nightly
+
+##copy to -upstream ##########
+cd $DEV
+./copy-to-upstream.sh up-nightly
 
