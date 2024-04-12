@@ -2,6 +2,8 @@
 
 import os, sys, fire
 from datetime import datetime 
+
+valid_components = ["spock40", "spock33"]
   
 now = datetime.now() 
 month=str(now.month).zfill(2)
@@ -11,21 +13,31 @@ min=str(now.minute).zfill(2)
 sec=str(now.second).zfill(2)
 
 TIME=(f"{month}{day}-{hour}{min}{sec}")
+HD=f"up-{TIME}"
 DESTINY="upstream"
 CLI_BRANCH="REL24_Q2"
 
+DEV=os.getenv("DEV")
 HIST=os.getenv("HIST")
 SOURCE=os.getenv("SOURCE")
-PGE=os.getenv(PGE"")
+PGE=os.getenv("PGE")
 BLD=os.getenv("BLD")
 OUT=os.getenv("OUT")
 
 def cmd(c):
-  print(f"# {c}")
+  print(f"$ {c}")
   rc = os.system(c)
   if rc != 0:
     err(f"running '{c}'")
 
+def cd(d):
+  print(f"$ cd {d}")
+  try:
+    rc = os.chdir(d)
+  except Exception as e:
+    err(str(e))
+
+  print(f"  - {os.getcwd()}")
 
 def err(msg):
   print(f"ERROR: {msg}")
@@ -35,53 +47,62 @@ def err(msg):
 def comp(name, ver, repo, branch):
   '''Push a component to UPSTREAM'''
 
-  print(f"push.comp(name={name}, ver={ver}, repo={repo}, branch={branch})")
+  print(f"\n## push.comp(name={name}, ver={ver}, repo={repo}, branch={branch})")
 
-
-  hdir=f"{HIST}/up-{TIME}"
-  if os.path.isdir(hdir):
-     err(f"{hdir} already exists")
+  print("\n#0 validate parms ##################")
+  if name in valid_components:
+    pass
   else:
-     cmd(f"mkdir {hdir}")
+    err(f"invalid component {name}.  must be in {valid_components}")
+
+  cmd(f' grep "{name}V={ver}" versions.sh')
 
   if not os.path.isdir(repo):
      cmd(f"git clone https://github.com/pgedge/{repo}")
 
-  ## get current repo version ##
-  os.chdir(repo)
+  print("\n#1) get current repo version ########")
+  cd(repo)
   cmd(f"git checkout {branch}")
   cmd("git pull")
 
-  ## build a tar file ########
+  print("\n#2) build a tar file ################")
   zipd=f"{name}-{ver}"
-  os.chdir("..")
-  os.system(f"rm -rf {zipd}")
+  cd("..")
+  cmd(f"rm -rf {zipd}")
   cmd(f"cp -pr {repo} {zipd}")
-  os.system(f"rm -rf {zipd}/.git")
+  cmd(f"rm -rf {zipd}/.git")
   cmd(f"tar czf {zipd}.tar.gz {zipd}")
-  os.system(f"rm -r {zipd}")
+  cmd(f"rm -r {zipd}")
 
-  ## copy to src directory ####
-  os.system(f"rm -f {SOURCE}/{zipd}.tar.gz")
-  cmd(f"cp {zipd}.tar.gz {SOURCE}/.
-  cmd(f"mv {zipd}.tar.gz {SOURCE}/{zipd}-{now}.tar.gz
+  print("\n#3) copy to src directory ###########")
+  cmd(f"rm -f {SOURCE}/{zipd}.tar.gz")
+  cmd(f"cp {zipd}.tar.gz {SOURCE}/.")
+  cmd(f"mv {zipd}.tar.gz {SOURCE}/{zipd}-{TIME}.tar.gz")
 
-  ## build from src ############
-  os.chdir(BLD)
+  print("\n#4) build from src ##################")
+  cd(BLD)
   cmd("git pull")
   cmd(f"./build-all-components.sh {name} 15 --copy-bin")
   cmd(f"./build-all-components.sh {name} 16 --copy-bin")
 
-  ## assemble the extension ####
-  os.chdir(PGE)
+  print("\n#5) assemble the extension ##########")
+  cd(PGE)
   cmd(f"git checkout {CLI_BRANCH}")
   cmd(f"git pull")
-  os.system(f"rm {OUT}/{name}*")
+  cmd(f"rm -f {OUT}/{name}*")
   cmd(f"./build_all.sh 15")
   cmd(f"./build_all.sh 16")
 
-  print("Hello")
-
+  print(f"#6) push to {DESTINY} ###############")
+  hdir=f"{HIST}/{HD}"
+  
+  if os.path.isdir(hdir):
+     err(f"{hdir} already exists")
+  else:
+     cmd(f"mkdir {hdir}")
+  cd(DEV)
+  cmd(f"cp -p {OUT}/{name}* {hdir}/.")
+  cmd(f"./copy-to-{DESTINY}.sh {HD}")
 
 
 if __name__ == "__main__":
