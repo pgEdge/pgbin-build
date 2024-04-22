@@ -144,11 +144,10 @@ function updateSharedLibs {
         if [[ -d $buildLocation/bin ]]; then
           cd $buildLocation/bin
           for file in `ls -d *` ; do
-            #chrpath -r "\${ORIGIN}/../lib" "$file" >> $libPathLog 2>&1
             if [ `uname` == "Darwin" ]; then
               fixMacOSBinary "$file" "$escapedBaseDir" '@executable_path/../lib' "$libPathLog"
             else
-              chrpath -r "\${ORIGIN}/../../pg15/lib" "$file" >> $libPathLog 2>&1
+              chrpath -r "\${ORIGIN}/../lib" "$file" >> $libPathLog 2>&1
             fi
       	  done
         fi
