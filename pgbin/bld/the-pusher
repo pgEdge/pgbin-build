@@ -75,14 +75,14 @@ def comp(name, ver, repo, branch):
   cmd(f"rm -r {zipd}")
 
   print("\n#3) copy to src directory ###########")
-  cmd(f"rm -f {SOURCE}/{zipd}.tar.gz")
   cmd(f"cp {zipd}.tar.gz {SOURCE}/.")
-  cmd(f"mv {zipd}.tar.gz {SOURCE}/{zipd}-{TIME}.tar.gz")
+  ## archive to /tmp
+  cmd(f"mv {zipd}.tar.gz /tmp/{zipd}-{TIME}.tar.gz")
 
   print("\n#4) build from src ##################")
   cd(BLD)
   cmd("git pull")
-  cmd(f"./build-all-components.sh {name} 15 --copy-bin")
+  ## cmd(f"./build-all-components.sh {name} 15 --copy-bin")
   cmd(f"./build-all-components.sh {name} 16 --copy-bin")
 
   print("\n#5) assemble the extension ##########")
@@ -90,7 +90,7 @@ def comp(name, ver, repo, branch):
   cmd(f"git checkout {CLI_BRANCH}")
   cmd(f"git pull")
   cmd(f"rm -f {OUT}/{name}*")
-  cmd(f"./build_all.sh 15")
+  ## cmd(f"./build_all.sh 15")
   cmd(f"./build_all.sh 16")
 
   print(f"#6) push to {DESTINY} ###############")

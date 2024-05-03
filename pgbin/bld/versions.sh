@@ -3,7 +3,7 @@
 lolorV=1.0beta1
 lolorBldV=1
 
-spock40V=4.0dev5
+spock40V=4.0dev
 spockBld40V=1
 
 spock33V=3.3.3
@@ -64,7 +64,7 @@ citusFullV=12.1.2
 citusShortV=
 citusBuildV=1
 
-vectorFullV=0.6.2
+vectorFullV=0.7.0
 vectorShortV=
 vectorBuildV=1
 
