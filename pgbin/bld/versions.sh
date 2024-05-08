@@ -68,7 +68,7 @@ vectorFullV=0.7.0
 vectorShortV=
 vectorBuildV=1
 
-hypopgFullV=1.4.0
+hypopgFullV=1.4.1
 hypopgShortV=
 hypopgBuildV=1
 
