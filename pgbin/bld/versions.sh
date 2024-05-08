@@ -60,7 +60,7 @@ multicorn2FullV=2.4
 multicorn2ShortV=
 multicorn2BuildV=1
 
-citusFullV=12.1.2
+citusFullV=12.1.3
 citusShortV=
 citusBuildV=1
 
@@ -142,7 +142,7 @@ hintplan15V=1.5.1
 hintplanShortV=
 hintplanBuildV=1
 
-timescaledbFullV=2.13.1
+timescaledbFullV=2.14.2
 timescaledbShortV=
 timescaledbBuildV=1
 
