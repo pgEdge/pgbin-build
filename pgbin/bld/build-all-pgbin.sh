@@ -103,7 +103,9 @@ elif [ "$majorV" == "14" ]; then
   p1=pg14-005-log_old_value.diff
   p2=pg14-010-allow_logical_decoding_on_standbys.diff
   p3=pg14-012-hidden_columns.diff
-  export_patches "$p1" "$p2" "$p3"
+  p4=pg14-015-delta_apply_function.diff
+  p5=pg14-020-LOG-to-DEBUG1.diff
+  p6=pg14-025-logical_commit_clock.diff
 
 elif [ "$majorV" == "15" ]; then
   pgV=$pg15V
@@ -116,8 +118,6 @@ elif [ "$majorV" == "15" ]; then
   p5=pg15-020-LOG-to-DEBUG1.diff
   p6=pg15-025-logical_commit_clock.diff
 
-  export_patches "$p1" "$p2" "$p3" "$p4" "$p5" "$p6"
-
 elif [ "$majorV" == "16" ]; then
   pgV=$pg16V
   pgBuildV=$pg16BuildV
@@ -128,18 +128,20 @@ elif [ "$majorV" == "16" ]; then
   p4=pg16-020-LOG-to-DEBUG1.diff
   p5=pg15-025-logical_commit_clock.diff
 
-  export_patches "$p1" "$p2" "$p3" "$p4" "$p5"
-
 elif [ "$majorV" == "17" ]; then
   pgV=$pg17V
   pgBuildV=$pg17BuildV
 
   p1=pg17-005-log_old_value.diff
   p2=pg17-012-hidden_columns-v3.diff
-  export_patches "$p1" "$p2"
+  p3=pg17-015-delta_apply_function.diff
+  p4=pg17-020-LOG-to-DEBUG1.diff
+  p5=pg17-025-logical_commit_clock.diff
+  p6=pg17-090-init_template_fix.diff
 
 fi
 
+export_patches $p1 $p2 $p3 $p4 $p5 $p6
 runPgBin "$binBld" "$pgSrc-$pgV.tar.gz" "$pgBuildV"
 
 exit 0
