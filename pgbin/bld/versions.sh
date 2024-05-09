@@ -3,7 +3,7 @@
 lolorV=1.0
 lolorBldV=1
 
-spock40V=4.0dev
+spock40V=4.0.130
 spockBld40V=1
 
 spock33V=3.3.3
@@ -35,10 +35,6 @@ snwflkBldV=1
 
 wal2jV=2.6.0
 wal2jBldV=1
-
-readonlyFullV=1.1.1
-readonlyShortV=
-readonlyBuildV=1
 
 decoderbufsFullV=1.7.0
 decoderbufsShortV=
