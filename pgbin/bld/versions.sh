@@ -1,6 +1,6 @@
 #!/bin/bash
 
-lolorV=1.0
+lolorV=1.1
 lolorBldV=1
 
 spock40V=4.0.131
