@@ -19,9 +19,8 @@ function bpc {
 }
 
 
-bpc spock32
+bpc spock33
 bpc snowflake
-bpc readonly
 bpc foslots
 
 exit 0
