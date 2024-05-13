@@ -30,15 +30,13 @@ if [[ "$pgV" < "12" ]] || [[ "$pgV" > "17" ]]; then
 fi
 
 
-## WIP ############################################
-
 if [ "$1" == "vector" ]; then
   build vector $vectorFullV $2 vector
 fi
 
-if [ "$1" == "pljava" ]; then
-  build pljava $pljavaFullV $2 pljava
-fi
+##if [ "$1" == "pljava" ]; then
+##  build pljava $pljavaFullV $2 pljava
+##fi
 
 if [ "$1" == "plv8" ]; then
   build plv8 $plv8FullV $2 plv8
@@ -64,9 +62,9 @@ if [ "$1" == "wal2json" ]; then
   build wal2json $wal2jsonFullV $2 wal2json
 fi
 
-if [ "$1" == "mongofdw" ]; then
-  build mongofdw $mongofdwFullV $2 mongofdw
-fi
+##if [ "$1" == "mongofdw" ]; then
+##  build mongofdw $mongofdwFullV $2 mongofdw
+##fi
 
 if [ "$1" == "backrest" ]; then
   build backrest $backrestFullV $2 backrest
@@ -78,10 +76,6 @@ fi
 
 if [ "$1" == "multicorn2" ]; then
   build multicorn2 $multicorn2FullV $2 multicorn2 
-fi
-
-if [ "$1" == "readonly" ]; then
-  build readonly $readonlyFullV $2 readonly
 fi
 
 if [ "$1" == "wal2json" ]; then
