@@ -72,7 +72,7 @@ postgisFullV=3.4.2
 postgisShortV=
 postgisBuildV=1
 
-orafceFullV=4.9.2
+orafceFullV=4.10.0
 orafceShortV=
 orafceBuildV=1
 
