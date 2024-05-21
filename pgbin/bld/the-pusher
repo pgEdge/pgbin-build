@@ -14,7 +14,7 @@ sec=str(now.second).zfill(2)
 
 TIME=(f"{month}{day}-{hour}{min}{sec}")
 HD=f"up-{TIME}"
-DESTINY="upstream"
+DESTINY="devel"
 CLI_BRANCH="REL24_Q2"
 
 DEV=os.getenv("DEV")
