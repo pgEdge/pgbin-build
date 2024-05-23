@@ -6,7 +6,7 @@ binBld=/opt/pgbin-build/builds
 source ./versions.sh
 
 SPOCK_REPO=spock-private
-SPOCK_BRANCH=per-subtrans-commit-ts
+SPOCK_BRANCH=main
 
 
 function runPgBin {
