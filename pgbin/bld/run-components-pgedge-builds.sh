@@ -9,8 +9,10 @@ function bpc {
   rc2=$?
   $bac $1 16 --copy-bin
   rc3=$?
+  $bac $1 17 --copy-bin
+  rc4=$?
 
-  if [ "$rc1" == "0" ] && [ "$rc2" == "0" ] && [ "$rc3" == "0" ]; then
+  if [ "$rc1" == "0" ] && [ "$rc2" == "0" ] && [ "$rc3" == "0" ] && [ "$rc3" == "0" ]; then
     return
   fi
 
@@ -19,8 +21,12 @@ function bpc {
 }
 
 
-bpc spock33
+bpc lolor
+bpc spock40
 bpc snowflake
-bpc foslots
+
+#bpc foslots
+#bpc spock33
+
 
 exit 0
