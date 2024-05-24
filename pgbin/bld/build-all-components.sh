@@ -74,8 +74,8 @@ if [ "$1" == "citus" ]; then
   build citus $citusFullV $2 citus
 fi
 
-if [ "$1" == "multicorn2" ]; then
-  build multicorn2 $multicorn2FullV $2 multicorn2 
+if [ "$1" == "multicorn" ]; then
+  build multicorn $multicornFullV $2 multicorn 
 fi
 
 if [ "$1" == "wal2json" ]; then

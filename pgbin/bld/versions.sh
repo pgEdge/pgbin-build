@@ -52,9 +52,9 @@ backrestFullV=2.51
 backrestShortV=
 backrestBuildV=1
 
-multicorn2FullV=2.4
-multicorn2ShortV=
-multicorn2BuildV=1
+multicornFullV=3.0beta1
+multicornShortV=
+multicornBuildV=1
 
 citusFullV=12.1.3
 citusShortV=

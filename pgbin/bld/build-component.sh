@@ -301,7 +301,7 @@ function buildComp {
         configureComp
 
         make_install="make install"
-        if [ "$comp" == "multicorn2" ]; then
+        if [ "$comp" == "multicorn" ]; then
             sudo mkdir -p /usr/local/lib64/python3.9/site-packages
             make_install="sudo env "PATH=$PATH" make install"
             export PYTHON_OVERRIDE=python3.9
@@ -329,7 +329,7 @@ function buildComp {
                 return 1
         fi
 
-        if [ "$comp" == "multicorn2" ]; then
+        if [ "$comp" == "multicorn" ]; then
           sudo chown $USER:$USER $buildLocation/lib/postgresql/multicorn.so
         fi
 
@@ -507,7 +507,7 @@ while true; do
     --build-hintplan ) buildHintPlan=true; Source=$2; shift; shift ;;
     --build-timescaledb ) buildTimeScaleDB=true; timescaleDBSource=$2; shift; shift ;;
     --build-cron ) buildCron=true; Source=$2; shift; shift ;;
-    --build-multicorn2 ) buildMulticorn2=true; Source=$2; shift; shift ;;
+    --build-multicorn ) buildMulticorn=true; Source=$2; shift; shift ;;
     --build-anon ) buildAnon=true; Source=$2; shift; shift ;;
     --build-ddlx ) buildDdlx=true; Source=$2; shift; shift ;;
     --build-citus ) buildCitus=true; Source=$2; shift; shift ;;
@@ -588,8 +588,8 @@ if [ "$buildCron" == "true" ]; then
 	buildComp cron  "$cronShortV" "$cronFullV" "$cronBuildV" "$Source"
 fi
 
-if [ "$buildMulticorn2" == "true" ]; then
-	buildComp multicorn2  "$multicorn2ShortV" "$multicorn2FullV" "$multicorn2BuildV" "$Source"
+if [ "$buildMulticorn" == "true" ]; then
+	buildComp multicorn  "$multicornShortV" "$multicornFullV" "$multicornBuildV" "$Source"
 fi
 
 if [[ $buildRepack == "true" ]]; then
