@@ -21,12 +21,12 @@ function bpc {
 }
 
 
-bpc lolor
-bpc spock40
-bpc snowflake
+#bpc lolor
+#bpc spock40
+#bpc snowflake
 
 #bpc foslots
-#bpc spock33
+bpc spock33
 
 
 exit 0
