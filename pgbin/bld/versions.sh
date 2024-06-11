@@ -48,7 +48,7 @@ odbcFullV=13.01
 odbcShortV=
 odbcBuildV=1
 
-backrestFullV=2.51
+backrestFullV=2.52
 backrestShortV=
 backrestBuildV=1
 
@@ -56,11 +56,11 @@ multicornFullV=3.0beta1
 multicornShortV=
 multicornBuildV=1
 
-citusFullV=12.1.3
+citusFullV=12.1.4
 citusShortV=
 citusBuildV=1
 
-vectorFullV=0.7.0
+vectorFullV=0.7.1
 vectorShortV=
 vectorBuildV=1
 
@@ -138,7 +138,7 @@ hintplan15V=1.5.1
 hintplanShortV=
 hintplanBuildV=1
 
-timescaledbFullV=2.14.2
+timescaledbFullV=2.15.2
 timescaledbShortV=
 timescaledbBuildV=1
 
