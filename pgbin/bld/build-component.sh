@@ -462,7 +462,7 @@ function buildTimeScaleDBComponent {
         packageComponent $componentBundle
 }
 
-TEMP=`getopt -l no-tar, copy-bin,no-copy-bin,with-pgver:,with-pgbin:,build-curl:,build-hypopg:,build-postgis:,build-oraclefdw:,build-orafce:,build-audit:,build-partman:,build-pldebugger:,build-pljava:,build-plv8:,build-plprofiler:,build-backrest:,build-spock33:,build-spock40:,build-snowflake:,build-foslots:,build-wal2json:,build-pglogical:,build-hintplan:,build-timescaledb:,build-cron:,build-citus:,build-vector: -- "$@"`
+TEMP=`getopt -l no-tar, copy-bin,no-copy-bin,with-pgver:,with-pgbin:,build-curl:,build-hypopg:,build-postgis:,build-oraclefdw:,build-orafce:,build-audit:,build-setuser:,build-permissions:,build-partman:,build-pldebugger:,build-pljava:,build-plv8:,build-plprofiler:,build-backrest:,build-spock33:,build-spock40:,build-snowflake:,build-foslots:,build-wal2json:,build-pglogical:,build-hintplan:,build-timescaledb:,build-cron:,build-citus:,build-vector: -- "$@"`
 
 if [ $? != 0 ] ; then
 	echo "Required parameters missing, Terminating..."
@@ -486,6 +486,8 @@ while true; do
     --build-oraclefdw ) buildOracleFDW=true; Source=$2; shift; shift ;;
     --build-orafce ) buildOrafce=true; Source=$2; shift; shift ;;
     --build-audit ) buildAudit=true; Source=$2; shift; shift ;;
+    --build-setuser ) buildSetUser=true; Source=$2; shift; shift ;;
+    --build-permissions ) buildPermissions=true; Source=$2; shift; shift ;;
     --build-hypopg ) buildHypopg=true; Source=$2; shift; shift ;;
     --build-curl ) buildCurl=true; Source=$2; shift; shift ;;
     --build-pldebugger ) buildPLDebugger=true; Source=$2; shift; shift ;;
@@ -566,6 +568,14 @@ fi
 
 if [[ $buildPostGIS ==  "true" ]]; then
 	buildComp postgis "$postgisShortV" "$postgisFullV" "$postgisBuildV" "$Source"
+fi
+
+if [[ $buildSetUser ==  "true" ]]; then
+	buildComp setuser "$setuserShortV" "$setuserFullV" "$setuserBuildV" "$Source"
+fi
+
+if [[ $buildPermissions ==  "true" ]]; then
+	buildComp permissons "$permissionsShortV" "$permissionsFullV" "$permissionsBuildV" "$Source"
 fi
 
 if [[ $buildAudit == "true" ]]; then

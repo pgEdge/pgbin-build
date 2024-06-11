@@ -121,6 +121,14 @@ auditFull16V=16.0
 auditShortV=
 auditBuildV=1
 
+setuserFullV=4.0.1
+setuserShortV=
+setuserBuildV=1
+
+permissionsFullV=1.2
+permissionsShortV=
+permissionsBuildV=1
+
 pljavaFullV=1.6.6
 pljavaShortV=
 pljavaBuildV=1

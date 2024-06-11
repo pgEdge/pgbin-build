@@ -102,6 +102,14 @@ if [ "$1" == "bulkload" ]; then
   build bulkload $bulkloadFullV $2 bulkload
 fi
 
+if [ "$1" == "setuser" ]; then
+  build setuser $setuserFullV $2 setuser  
+fi
+
+if [ "$1" == "permissions" ]; then
+  build permissions $permissionsFullV $2 permissions
+fi
+
 if [ "$1" == "postgis" ]; then
   build postgis $postgisFullV $2 postgis  
 fi
