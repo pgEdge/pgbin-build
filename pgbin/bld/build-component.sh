@@ -575,7 +575,7 @@ if [[ $buildSetUser ==  "true" ]]; then
 fi
 
 if [[ $buildPermissions ==  "true" ]]; then
-	buildComp permissons "$permissionsShortV" "$permissionsFullV" "$permissionsBuildV" "$Source"
+	buildComp permissions "$permissionsShortV" "$permissionsFullV" "$permissionsBuildV" "$Source"
 fi
 
 if [[ $buildAudit == "true" ]]; then
