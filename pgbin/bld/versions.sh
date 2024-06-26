@@ -30,7 +30,7 @@ pg12BuildV=1
 foslotsV=1a
 foslotsBldV=1
 
-snwflkV=2.1
+snwflkV=2.2
 snwflkBldV=1
 
 wal2jV=2.6.0
