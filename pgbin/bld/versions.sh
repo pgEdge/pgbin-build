@@ -76,25 +76,9 @@ orafceFullV=4.10.0
 orafceShortV=
 orafceBuildV=1
 
-oraclefdwFullV=2.6.0
-oraclefdwShortV=
-oraclefdwBuildV=1
-
-logfdwFullV=1.4
-logfdwShortV=
-logfdwBuildV=1
-
-tdsfdwFullV=2.0.3
-tdsfdwShortV=
-tdsfdwBuildV=1
-
-mysqlfdwFullV=2.8.0
-mysqlfdwShortV=
-mysqlfdwBuildV=1
-
-mongofdwFullV=5.4.0
-mongofdwShortV=
-mongofdwBuildV=1
+sqlitefdwFullV=2.4.0
+sqlitefdwShortV=
+sqlitefdwBuildV=1
 
 plProfilerFullVersion=4.2.4
 plProfilerShortVersion=

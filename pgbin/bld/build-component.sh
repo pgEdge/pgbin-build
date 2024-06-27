@@ -176,13 +176,7 @@ function updateSharedLibs {
 
 	lib64=/usr/lib64
 	shared_lib=$buildLocation/lib
-        if [ "$comp" == "mongofdw" ]; then
-          cp -P $lib64/libmongo*.so* $shared_lib/.
-          cp -P $lib64/libbson*.so*  $shared_lib/.
-          cp -P $lib64/libicu*.so*   $shared_lib/.
-        elif [ "$comp" == "mysqlfdw" ]; then
-          cp -P $lib64/mysql/libmysqlclient.* $shared_lib/.
-	elif [ "$comp" == "decoderbufs" ]; then
+	if [ "$comp" == "decoderbufs" ]; then
           cp -P $lib64/libproto*.so* $shared_lib/.
 	elif [ "$comp" == "postgis" ]; then
           cp -P $lib64/libprotobuf*.so* $shared_lib/.
@@ -202,14 +196,6 @@ function configureComp {
     rc=0
 
     make="make"
-
-    if [ "$comp" == "mongofdw" ]; then
-        echo "# configure mongofdw..."
-        export MONGOC_INSTALL_DIR=$buildLocation
-        export JSONC_INSTALL_DIR=$buildLocation
-        ./autogen.sh --with-master >> $make_log 2>&1
-        rc=$?
-    fi
 
     if [ "$comp" == "citus" ]; then
         echo "# configure citus..."
@@ -464,7 +450,7 @@ function buildTimeScaleDBComponent {
         packageComponent $componentBundle
 }
 
-TEMP=`getopt -l no-tar, copy-bin,no-copy-bin,with-pgver:,with-pgbin:,build-curl:,build-hypopg:,build-postgis:,build-oraclefdw:,build-orafce:,build-audit:,build-setuser:,build-permissions:,build-partman:,build-pldebugger:,build-pljava:,build-plv8:,build-plprofiler:,build-backrest:,build-spock33:,build-spock40:,build-snowflake:,build-foslots:,build-wal2json:,build-pglogical:,build-hintplan:,build-timescaledb:,build-cron:,build-citus:,build-vector: -- "$@"`
+TEMP=`getopt -l no-tar, copy-bin,no-copy-bin,with-pgver:,with-pgbin:,build-curl:,build-hypopg:,build-postgis:,build-sqlitefdw:,build-orafce:,build-audit:,build-setuser:,build-permissions:,build-partman:,build-pldebugger:,build-pljava:,build-plv8:,build-plprofiler:,build-backrest:,build-spock33:,build-spock40:,build-snowflake:,build-foslots:,build-wal2json:,build-pglogical:,build-hintplan:,build-timescaledb:,build-cron:,build-citus:,build-vector: -- "$@"`
 
 if [ $? != 0 ] ; then
 	echo "Required parameters missing, Terminating..."
@@ -480,12 +466,8 @@ while true; do
     --with-pgbin ) pgBinPassed=true; pgBin=$2; shift; shift; ;;
     --target-dir ) targetDirPassed=true; targetDir=$2; shift; shift ;;
     --build-postgis ) buildPostGIS=true; Source=$2; shift; shift ;;
-    --build-logfdw ) buildLOGFDW=true; Source=$2; shift; shift ;;
-    --build-tdsfdw ) buildTDSFDW=true; Source=$2; shift; shift ;;
-    --build-mongofdw ) buildMongoFDW=true Source=$2; shift; shift ;;
     --build-decoderbufs ) buildDecoderBufs=true Source=$2; shift; shift ;;
-    --build-mysqlfdw ) buildMySQLFDW=true; Source=$2; shift; shift ;;
-    --build-oraclefdw ) buildOracleFDW=true; Source=$2; shift; shift ;;
+    --build-sqlitefdw ) buildSqliteFDW=true; Source=$2; shift; shift ;;
     --build-orafce ) buildOrafce=true; Source=$2; shift; shift ;;
     --build-audit ) buildAudit=true; Source=$2; shift; shift ;;
     --build-setuser ) buildSetUser=true; Source=$2; shift; shift ;;
@@ -538,34 +520,18 @@ if [[ $buildOrafce == "true" ]]; then
 	buildComp orafce "$orafceShortV" "$orafceFullV" "$orafceBuildV" "$Source"
 fi
 
-if [[ $buildMongoFDW == "true" ]]; then
-	buildComp mongofdw "$mongofdwShortV" "$mongofdwFullV" "$mongofdwBuildV" "$Source"
-fi
-
 if [[ $buildDecoderBufs == "true" ]]; then
 	export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
 	buildComp decoderbufs "$decoderbufsShortV" "$decoderbufsFullV" "$decoderbufsBuildV" "$Source"
 fi
 
-if [[ $buildLOGFDW == "true" ]]; then
-	buildComp logfdw "$logfdwShortV" "$logfdwFullV" "$logfdwBuildV" "$Source"
-fi
-
-if [[ $buildTDSFDW == "true" ]]; then
-	buildComp tdsfdw "$tdsfdwShortV" "$tdsfdwFullV" "$tdsfdwBuildV" "$Source"
-fi
-
-if [[ $buildOracleFDW == "true" ]]; then
-	echo "ORACLE_HOME=$ORACLE_HOME"
-	if [ ! "$ORACLE_HOME" > " " ]; then
-		echo "FATAL ERROR: ORACLE_HOME is not set"
-		exit 1
-	fi
-	buildComp oraclefdw "$oraclefdwShortV" "$oraclefdwFullV" "$oraclefdwBuildV" "$Source"
-fi
-
-if [[ $buildMySQLFDW == "true" ]]; then
-	buildComp mysqlfdw "$mysqlfdwShortV" "$mysqlfdwFullV" "$mysqlfdwBuildV" "$Source"
+if [[ $buildSqliteFDW == "true" ]]; then
+#	echo "ORACLE_HOME=$ORACLE_HOME"
+#	if [ ! "$ORACLE_HOME" > " " ]; then
+#		echo "FATAL ERROR: ORACLE_HOME is not set"
+#		exit 1
+#	fi
+	buildComp sqlitefdw "$sqlitefdwShortV" "$sqlitefdwFullV" "$sqlitefdwBuildV" "$Source"
 fi
 
 if [[ $buildPostGIS ==  "true" ]]; then

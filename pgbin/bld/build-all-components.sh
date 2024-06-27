@@ -34,10 +34,6 @@ if [ "$1" == "vector" ]; then
   build vector $vectorFullV $2 vector
 fi
 
-##if [ "$1" == "pljava" ]; then
-##  build pljava $pljavaFullV $2 pljava
-##fi
-
 if [ "$1" == "plv8" ]; then
   build plv8 $plv8FullV $2 plv8
 fi
@@ -61,10 +57,6 @@ fi
 if [ "$1" == "wal2json" ]; then
   build wal2json $wal2jsonFullV $2 wal2json
 fi
-
-##if [ "$1" == "mongofdw" ]; then
-##  build mongofdw $mongofdwFullV $2 mongofdw
-##fi
 
 if [ "$1" == "backrest" ]; then
   build backrest $backrestFullV $2 backrest
@@ -90,16 +82,8 @@ if [ "$1" == "cron" ]; then
   build cron $cronFullV $2 cron
 fi
 
-if [ "$1" == "repack" ]; then
-  build repack $repackFullV $2 repack
-fi
-
 if [ "$1" == "partman" ]; then
   build partman $partmanFullV $2 partman
-fi
-
-if [ "$1" == "bulkload" ]; then
-  build bulkload $bulkloadFullV $2 bulkload
 fi
 
 if [ "$1" == "setuser" ]; then
@@ -158,14 +142,6 @@ if [ "$1" == "spock33" ]; then
   build spock33 $spock33V $2  spock33
 fi
 
-if [ "$1" == "pglogical" ]; then
-  build pglogical $pgLogicalFullV $2 logical
-fi
-
-if [ "$1" == "anon" ]; then
-  build anon $anonFullV $2 anon
-fi
-
 if [ "$1" == "ddlx" ]; then
   build ddlx $ddlxFullV $2 ddlx
 fi
@@ -174,20 +150,8 @@ if [ "$1" == "bouncer" ]; then
   build bouncer $bouncerFullV $2 bouncer
 fi
 
-if [ "$1" == "mysqlfdw" ]; then
-  build mysqlfdw $mysqlfdwFullV $2 mysqlfdw
-fi
-
-if [ "$1" == "oraclefdw" ]; then
-  build oraclefdw $oraclefdwFullV $2 oraclefdw
-fi
-
-if [ "$1" == "logfdw" ]; then
-  build logfdw $logfdwFullV $2 logfdw
-fi
-
-if [ "$1" == "tdsfdw" ]; then
-  build tdsfdw $tdsfdwFullV $2 tdsfdw
+if [ "$1" == "sqlitefdw" ]; then
+  build sqlitefdw $sqlitefdwFullV $2 sqlitefdw
 fi
 
 exit 0
