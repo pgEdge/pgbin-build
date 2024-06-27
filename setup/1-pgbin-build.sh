@@ -71,6 +71,7 @@ if [ $uname == 'Linux' ]; then
       sudo $yum clang
       if [ "$PLATFORM" == "el9" ]; then
         sudo $yum geos-devel proj-devel gdal
+        sudo $yum sqlite-devel
       fi
 
       curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs > install-rust.sh 
