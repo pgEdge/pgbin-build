@@ -19,15 +19,21 @@ if [ $uname == 'Linux' ]; then
   fi
 
   if [ "$YUM" == "n" ]; then
+    apt="apt-get install -y"
     PLATFORM=deb
     echo "## $PLATFORM ##"
-    sudo apt install git net-tools wget curl zip git python3 openjdk-17-jdk-headless bzip2
+
+    sudo $apt git net-tools wget curl zip git python3 openjdk-17-jdk-headless
+
+    ## for using FPM package managemnt software for makeing DEB's
+    sudo $apt squashfs-tools
+
     echo "## ONLY el8/9 supported for building binaries ###"
   else
     yum="dnf --skip-broken -y install"
     PLATFORM=`cat /etc/os-release | grep PLATFORM_ID | cut -d: -f2 | tr -d '\"'`
     echo "## $PLATFORM ##"
-    sudo $yum git net-tools wget curl pigz sqlite which zip bzip2
+    sudo $yum git net-tools wget curl pigz sqlite which zip
 
     sudo $yum cpan
     echo yes | sudo cpan FindBin
@@ -70,8 +76,15 @@ if [ $uname == 'Linux' ]; then
       fi 
       sudo $yum clang
       if [ "$PLATFORM" == "el9" ]; then
+        ## postgis
         sudo $yum geos-devel proj-devel gdal
+
+        ## sqlitefdw
         sudo $yum sqlite-devel
+
+        ## friggin packakge management
+        sudo $yum ruby rpm-build squashfs-tools
+        gem install fpm
       fi
 
       curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs > install-rust.sh 
@@ -79,8 +92,6 @@ if [ $uname == 'Linux' ]; then
       ./install-rust.sh -y
       rm install-rust.sh
 
-      ## sudo yum install -y ghc
-      ## curl -sSL https://get.haskellstack.org/ | sh
     fi
   fi
 
@@ -89,12 +100,6 @@ elif [ $uname == 'Darwin' ]; then
   if [ "$SHELL" != "/bin/bash" ]; then
     chsh -s /bin/bash
   fi
-  ## brew --version > /dev/null 2>&1
-  ## rc=$?
-  ## if [ ! "$rc" == "0" ]; then
-  ##   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  ## fi
-  ## brew install pkg-config krb5 wget curl readline lz4 openssl@1.1 openldap ossp-uuid
 fi
 
 cd ~/dev
