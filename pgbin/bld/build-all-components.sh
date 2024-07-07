@@ -54,10 +54,6 @@ if [ "$1" == "decoderbufs" ]; then
   build decoderbufs $decoderbufsFullV $2 decoderbufs
 fi
 
-if [ "$1" == "wal2json" ]; then
-  build wal2json $wal2jsonFullV $2 wal2json
-fi
-
 if [ "$1" == "backrest" ]; then
   build backrest $backrestFullV $2 backrest
 fi
