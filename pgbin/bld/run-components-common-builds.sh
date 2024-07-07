@@ -17,6 +17,8 @@ function bcc {
 }
 
 
+bcc setuser
+bcc permissions
 bcc hypopg
 bcc orafce
 bcc curl
@@ -30,7 +32,6 @@ bcc timescale
 bcc plprofiler
 bcc pldebugger
 bcc citus
-bcc pglogical
 bcc timescaledb
 bcc wal2json
 ## bcc plv8
