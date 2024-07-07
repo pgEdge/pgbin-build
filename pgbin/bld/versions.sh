@@ -165,17 +165,8 @@ if [[ "$OS" == "Linux" ]]; then
   fi
   if [[ "$ARCH" == "aarch64" ]]; then
     OS=arm
-    if [[ "$isEL9" == "yes" ]]; then
-      OS=arm9
-    fi
   else
-    if [[ "$isEL8" == "yes" ]]; then
-      OS=el8
-    elif [[ "$isEL9" == "yes" ]]; then
-      OS=el9
-    else
-      OS=amd
-    fi
+    OS=amd
   fi
 elif [[ "$OS" == "Darwin" ]]; then
   CORES=`/usr/sbin/sysctl hw.physicalcpu | awk '{print $2}'`
