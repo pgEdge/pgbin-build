@@ -31,7 +31,7 @@ function linuxCopySharedLibs {
   cp -Pv $lib/libpam.so.*        $shared_lib/.
   cp -Pv $lib/libpython3.so      $shared_lib/.
   cp -Pv $lib/libpython3.9*      $shared_lib/.
-  cp -Pv $lib/libtinfo.so.*      $shared_lib/.
+  ## cp -Pv $lib/libtinfo.so.*      $shared_lib/.
   cp -Pv $lib/libnss3*           $shared_lib/.
   cp -Pv $lib/libnspr4*          $shared_lib/.
   cp -Pv $lib/libnssutil3*       $shared_lib/.
@@ -42,7 +42,7 @@ function linuxCopySharedLibs {
   cp -Pv $lib/libfreebl3.so      $shared_lib/.
   cp -Pv $lib/libcap*            $shared_lib/.
   cp -Pv $lib/libaudit*          $shared_lib/.
-  cp -Pv $lib/libresolv.so.2     $shared_lib/.
+  cp -Pv $lib/libresolv*         $shared_lib/.
   cp -Pv $lib/libicu*.so.*       $shared_lib/.
   cp -Pv $lib/libeconf*          $shared_lib/.
   cp -Pv $lib/liblzma.so.*       $shared_lib/.
