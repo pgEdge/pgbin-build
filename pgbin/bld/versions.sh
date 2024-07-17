@@ -44,10 +44,6 @@ curlFullV=2.2.2
 curlShortV=
 curlBuildV=1
 
-odbcFullV=13.01
-odbcShortV=
-odbcBuildV=1
-
 backrestFullV=2.52
 backrestShortV=
 backrestBuildV=1

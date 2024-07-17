@@ -172,8 +172,6 @@ function updateSharedLibs {
           done
         fi
 
-        ##cat $libPathLog
-
 	lib64=/usr/lib64
 	shared_lib=$buildLocation/lib
 	if [ "$comp" == "decoderbufs" ]; then
@@ -290,9 +288,8 @@ echo "# PATH = $PATH"
 
         make_install="make install"
         if [ "$comp" == "multicorn" ]; then
-            sudo mkdir -p /usr/local/lib64/python3.9/site-packages
             make_install="sudo env "PATH=$PATH" make install"
-            export PYTHON_OVERRIDE=python3.9
+            export PYTHON_OVERRIDE=python3.11
         fi
 
         echo "#  @`date`  make -j $CORES"
@@ -450,7 +447,7 @@ function buildTimeScaleDBComponent {
         packageComponent $componentBundle
 }
 
-TEMP=`getopt -l no-tar, copy-bin,no-copy-bin,with-pgver:,with-pgbin:,build-curl:,build-hypopg:,build-postgis:,build-sqlitefdw:,build-orafce:,build-audit:,build-setuser:,build-permissions:,build-partman:,build-pldebugger:,build-pljava:,build-plv8:,build-plprofiler:,build-backrest:,build-spock33:,build-spock40:,build-snowflake:,build-foslots:,build-wal2json:,build-pglogical:,build-hintplan:,build-timescaledb:,build-cron:,build-citus:,build-vector: -- "$@"`
+TEMP=`getopt -l no-tar, copy-bin,no-copy-bin,with-pgver:,with-pgbin:,build-curl:,build-hypopg:,build-postgis:,build-sqlitefdw:,build-orafce:,build-audit:,build-setuser:,build-permissions:,build-partman:,build-pldebugger:,build-pljava:,build-plv8:,build-plprofiler:,build-backrest:,build-spock33:,build-spock40:,build-snowflake:,build-foslots:,build-wal2json:,build-hintplan:,build-timescaledb:,build-cron:,build-citus:,build-vector: -- "$@"`
 
 if [ $? != 0 ] ; then
 	echo "Required parameters missing, Terminating..."
@@ -479,10 +476,7 @@ while true; do
     --build-plv8 ) buildPlV8=true; Source=$2; shift; shift ;;
     --build-pljava ) buildPlJava=true; Source=$2; shift; shift ;;
     --build-plprofiler ) buildPlProfiler=true; plProfilerSource=$2; shift; shift ;;
-    --build-bulkload ) buildBulkLoad=true; Source=$2; shift; shift ;;
-    --build-psqlodbc ) buildODBC=true; Source=$2; shift; shift ;;
     --build-backrest ) buildBackrest=true; Source=$2; shift; shift ;;
-    --build-repack ) buildRepack=true; Source=$2; shift; shift ;;
     --build-pglogical ) buildPgLogical=true; Source=$2; shift; shift ;;
     --build-snowflake ) buildSnowflake=true; Source=$2; shift; shift ;;
     --build-spock33 ) buildSpock33=true; Source=$2; shift; shift ;;
@@ -570,10 +564,6 @@ if [ "$buildMulticorn" == "true" ]; then
 	buildComp multicorn  "$multicornShortV" "$multicornFullV" "$multicornBuildV" "$Source"
 fi
 
-if [[ $buildRepack == "true" ]]; then
-	buildComp repack  "$repackShortV" "$repackFullV" "$repackBuildV" "$Source"
-fi
-
 if [[ $buildSnowflake == "true" ]]; then
 	buildComp snowflake  "" "$snwflkV" "$snwflkBldV" "$Source"
 fi
@@ -587,11 +577,6 @@ if [[ $buildFoSlots == "true" ]]; then
 fi
 
 if [[ $buildSpock33 == "true" ]]; then
-	## if [ "$pgVer" == "14" ]; then
-	##	export NO_LOG_OLD_VALUE=1
-	##	echo "NO_LOG_OLD_VALUE=1"
-	##
-	## fi
 	buildComp spock33  "" "$spock33V" "$spockBld33V" "$Source"
 fi
 
@@ -601,10 +586,6 @@ fi
 
 if [[ $buildLolor == "true" ]]; then
 	buildComp lolor  "" "$lolorV" "$lolorBldV" "$Source"
-fi
-
-if [[ $buildPgLogical == "true" ]]; then
-	buildComp pglogical  "$pgLogicalShortV" "$pgLogicalFullV" "$pgLogicalBuildV" "$Source"
 fi
 
 if [[ $buildPLDebugger == "true" ]]; then
@@ -625,14 +606,6 @@ fi
 
 if [[ $buildPlProfiler == "true" ]]; then
 	buildPlProfilerComponent
-fi
-
-if [[ $buildBulkLoad == "true" ]]; then
-	buildComp bulkload "$bulkloadShortV" "$bulkloadFullV" "$bulkloadBuildV" "$Source"
-fi
-
-if [[ $buildODBC == "true" ]]; then
-	buildComp psqlodbc "$odbcShortV" "$odbcFullV" "$odbcBuildV" "$Source"
 fi
 
 if [[ $buildBackrest == "true" ]]; then

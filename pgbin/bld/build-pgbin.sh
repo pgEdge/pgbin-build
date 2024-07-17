@@ -25,8 +25,6 @@ sourceTarPassed=0
 archiveLocationPassed=0
 buildVersionPassed=0
 
-buildODBC=0
-
 scriptName=`basename $0`
 
 
@@ -126,21 +124,6 @@ function checkPostgres {
 }
 
 
-
-function checkODBC {
-    cd $baseDir
-    mkdir -p $workDir
-
-    cd $baseDir/$workDir
-
-    odbcSourceDir=`dirname $(tar -tf $odbcSourceTar | grep "odbcapi.c")`
-
-    tar -xzf $odbcSourceTar
-
-    return 0
-}
-
-
 function patcher {
   if [ "$1" == "" ]; then
     return
@@ -178,16 +161,15 @@ function buildPostgres {
 	arch=`arch`
 
 	conf="--disable-rpath $pgOPT"
-	echo "OS=$OS"
 	if [ $OS == "osx" ]; then
 		conf="$conf --without-python --without-perl"
         else
-		conf="$conf  --with-libxslt --with-libxml --with-perl --with-python PYTHON=/usr/bin/python3.9"
+		conf="$conf  --with-libxslt --with-libxml --with-perl --with-python PYTHON=/usr/bin/python3.11"
 		conf="$conf --with-uuid=ossp --with-gssapi --with-ldap --with-pam --enable-debug --enable-dtrace"
 		conf="$conf --with-llvm LLVM_CONFIG=/usr/bin/llvm-config-64 --with-openssl --with-systemd --enable-tap-tests"
         fi
 
-	gcc --version
+	which gcc
 	echo "#  @`date`  $conf"
 	configCmnd="./configure --prefix=$buildLocation $conf" 
 
@@ -232,7 +214,6 @@ function buildPostgres {
 	oldPath=$PATH
 	PATH="$PATH:$buildLocation/bin"
 
-	echo "# skipping make docs"
 	return
 
 	cd $baseDir/$workDir/$pgSrcDir/doc
@@ -250,51 +231,7 @@ function buildPostgres {
 }
 
 
-function buildODBC {
-        echo "# buildODBC()"
-        cd $baseDir/$workDir/$odbcSourceDir
-
-	export LD_LIBRARY_PATH=$sharedLibs:$buildLocation/lib
-        export OLD_PATH=`echo $PATH`
-        export PATH=$sharedBins:$PATH
-       
-	echo "#   configure     @ `date`" 
-	log="$baseDir/$workDir/logs/odbc_configure.log"
-        ./configure --prefix=$buildLocation --with-libpq=$buildLocation LDFLAGS="-Wl,-rpath,$sharedLibs -L$sharedLibs" CFLAGS=-I$includePath > $log 2>&1
-        if [[ $? -ne 0 ]]; then
-                echo "FATAL ERROR: check $log"
-		unset LD_LIBRARY_PATH
-                return 1
-        fi
-
-	echo "#  @date  make -j $CORES"
-        log="$baseDir/$workDir/logs/odbc_make.log"
-        make -j $CORES > $log 2>&1
-        if [[ $? -ne 0 ]]; then
-                echo "FATAL ERROR: check $log"
-		unset LD_LIBRARY_PATH
-                export PATH=$OLD_PATH
-                return 1
-        fi
-
-	echo "#  @`date`   make install"
-        make install > $baseDir/$workDir/logs/odbc_install.log 2>&1
-        if [[ $? -ne 0 ]]; then
-                echo "Failed to install ODBC Driver ...."
-		unset LD_LIBRARY_PATH
-                export PATH=$OLD_PATH
-                return 1
-        fi
-	
-	unset LD_LIBRARY_PATH
-        export PATH=$OLD_PATH
-	return 0
-}
-
-
 function copySharedLibs {
-	##set -x
-	echo "#"
 	echo "# copySharedLibs()"
 	cp -Pp $sharedLibs/* $buildLocation/lib/
 	return
@@ -302,10 +239,10 @@ function copySharedLibs {
 
 function updateSharedLibPathsForLinux {
   libPathLog=$baseDir/$workDir/logs/libPath.log
-  echo "#   updateSharedLibPathsForLinux()"
+  echo "# updateSharedLibPathsForLinux()"
 
   cd $buildLocation/bin
-  echo "#     looping thru executables"
+  ##echo "#     looping thru executables"
   for file in `ls -d *` ; do
 	##echo "### $file"
 	chrpath -r "\${ORIGIN}/../lib" "$file" >> $libPathLog 2>&1
@@ -314,13 +251,13 @@ function updateSharedLibPathsForLinux {
   libSuffix="*so*"
 
   cd $buildLocation/lib
-  echo "#     looping thru shared objects"
+  ##echo "#     looping thru shared objects"
   for file in `ls -d $libSuffix 2>/dev/null` ; do
 	##echo "### $file"
 	chrpath -r "\${ORIGIN}/../lib" "$file" >> $libPathLog 2>&1
   done
 
-  echo "#     looping thru lib/postgresql "
+  ##echo "#     looping thru lib/postgresql "
   if [[ -d "$buildLocation/lib/postgresql" ]]; then
 	cd $buildLocation/lib/postgresql
 	##echo "### $file"
@@ -351,10 +288,10 @@ function fixMacOSBinary {
 function updateSharedLibPathsForMacOS {
   libPathLog=$baseDir/$workDir/logs/libPath.log
   escapedBaseDir="$(echo "$baseDir" | sed 's@/@\\/@g')"
-  echo "#   updateSharedLibPathsForMacOS()"
+  echo "#  updateSharedLibPathsForMacOS()"
 
   cd $buildLocation/bin
-  echo "#     looping thru executables"
+  ##echo "#     looping thru executables"
   for file in `ls -d *` ; do
 	##echo "### $file"
 	fixMacOSBinary "$file" "$escapedBaseDir" '@executable_path/../lib' "$libPathLog"
@@ -362,14 +299,14 @@ function updateSharedLibPathsForMacOS {
 
   libSuffix="*.dylib*"
   cd $buildLocation/lib
-  echo "#     looping thru shared objects"
+  ##echo "#     looping thru shared objects"
   for file in `ls -d $libSuffix 2>/dev/null` ; do
 	##echo "### $file"
 	fixMacOSBinary "$file" "$escapedBaseDir" '@loader_path/../lib' "$libPathLog"
   done
 
   libSuffix="*.so*"
-  echo "#     looping thru lib/postgresql"
+  ##echo "#     looping thru lib/postgresql"
   if [[ -d "$buildLocation/lib/postgresql" ]]; then
 	cd $buildLocation/lib/postgresql
 	##echo "### $file"
@@ -382,9 +319,6 @@ function updateSharedLibPathsForMacOS {
 
 
 function updateSharedLibPaths {
-	echo "#"
-	echo "# updateSharedLibPaths()"
-
 	if [ `uname` == "Linux" ]; then
 		updateSharedLibPathsForLinux
 	else
@@ -393,7 +327,6 @@ function updateSharedLibPaths {
 }
 
 function createBundle {
-	echo "#"
 	echo "# createBundle()"
 
 	cd $baseDir/$workDir/build
@@ -403,7 +336,7 @@ function createBundle {
 	Cmd="tar -czf $Tar.tgz $Tar $bndlPrfx-$pgSrcV-$pgBldV-$OS"
 
 	tar_log=$baseDir/$workDir/logs/tar.log
-        $Cmd >> $tar_log 2>&1
+	$Cmd >> $tar_log 2>&1
 	if [[ $? -ne 0 ]]; then
 		echo "Unable to create tar for $buildLocation, check logs .... "
 		echo "tar_log=$tar_log"
@@ -413,10 +346,14 @@ function createBundle {
 		mkdir -p $archiveDir/$workDir
 		mv "$Tar.tgz" $archiveDir/$workDir/
 
-		mkdir -p /opt/pgcomponent
-		cd /opt/pgcomponent
+                pgcomp=/opt/pgcomponent
+		if [ ! -d $pgcomp ]; then
+			sudo mkdir -p $pgcomp
+			sudo chown -R $USER:$USER $pgcomp
+		fi
+		cd $pgcomp
 		pgCompDir="pg$pgShortV"
-        	rm -rf $pgCompDir
+		rm -rf $pgCompDir
 		mkdir $pgCompDir 
 		tar -xf "$archiveDir/$workDir/$Tar.tgz" --strip-components=1 -C $pgCompDir
 	fi
@@ -481,19 +418,17 @@ if [[ $# -lt 1 ]]; then
 	exit 1
 fi
 
-echo "### $scriptName ###"
-
 optional=""
-while getopts "t:a:o:n:hc" opt; do
+while getopts "t:a:n:hc" opt; do
 	case $opt in
 		t)
 			if [[ $OPTARG = -* ]]; then
-       				((OPTIND--))
+				((OPTIND--))
 				continue
-      			fi
+			fi
 			pgTarLocation=$OPTARG
 			sourceTarPassed=1
-			echo "# -t $pgTarLocation"
+			##echo "# -t $pgTarLocation"
 		;;
 		a)
 			if [[ $OPTARG = -* ]]; then
@@ -501,19 +436,11 @@ while getopts "t:a:o:n:hc" opt; do
 			fi
 			archiveDir=$OPTARG
 			archiveLocationPassed=1
-			echo "# -a $archiveDir"
-		;;
-		o) 	if [[ OPTARG = -* ]]; then
-				((OPTIND--))
-				continue
-			fi
-			buildODBC=1
-			odbcSourceTar=$OPTARG
-			echo "# -o $odbcSourceTar"
+			##echo "# -a $archiveDir"
 		;;
 		n)	
 			pgBldV=$OPTARG
-			echo "# -n $pgBldV"
+			##echo "# -n $pgBldV"
 		;;
 		c)
 			optional="-c"
@@ -534,10 +461,6 @@ isPassed "$sourceTarPassed" "Postgres source tarball (-t)"
 
 checkCmd "checkPostgres"
 checkCmd "buildPostgres"
-
-#if [ "$buildODBC" == "1" ]; then
-#  buildApp "checkODBC" "buildODBC"
-#fi
 
 copySharedLibs
 checkCmd "updateSharedLibPaths"
