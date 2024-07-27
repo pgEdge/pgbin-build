@@ -289,7 +289,7 @@ echo "# PATH = $PATH"
         make_install="make install"
         if [ "$comp" == "multicorn" ]; then
             make_install="sudo env "PATH=$PATH" make install"
-            export PYTHON_OVERRIDE=python3.11
+            export PYTHON_OVERRIDE=python3.9
         fi
 
         echo "#  @`date`  make -j $CORES"
