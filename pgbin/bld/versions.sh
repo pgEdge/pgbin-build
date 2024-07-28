@@ -44,7 +44,7 @@ curlFullV=2.2.2
 curlShortV=
 curlBuildV=1
 
-backrestFullV=2.52
+backrestFullV=2.53
 backrestShortV=
 backrestBuildV=1
 
@@ -52,11 +52,11 @@ multicornFullV=3.0beta1
 multicornShortV=
 multicornBuildV=1
 
-citusFullV=12.1.4
+citusFullV=12.1.5
 citusShortV=
 citusBuildV=1
 
-vectorFullV=0.7.1
+vectorFullV=0.7.3
 vectorShortV=
 vectorBuildV=1
 
@@ -68,7 +68,7 @@ postgisFullV=3.4.2
 postgisShortV=
 postgisBuildV=1
 
-orafceFullV=4.10.0
+orafceFullV=4.10.3
 orafceShortV=
 orafceBuildV=1
 
@@ -105,7 +105,7 @@ setuserFullV=4.0.1
 setuserShortV=
 setuserBuildV=1
 
-permissionsFullV=1.2
+permissionsFullV=1.3
 permissionsShortV=
 permissionsBuildV=1
 
@@ -126,11 +126,11 @@ hintplan15V=1.5.1
 hintplanShortV=
 hintplanBuildV=1
 
-timescaledbFullV=2.15.2
+timescaledbFullV=2.15.3
 timescaledbShortV=
 timescaledbBuildV=1
 
-cronFullV=1.6.2
+cronFullV=1.6.3
 cronShortV=
 cronBuildV=1
 
