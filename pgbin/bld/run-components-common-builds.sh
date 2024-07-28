@@ -34,7 +34,7 @@ bcc pldebugger
 bcc citus
 bcc timescaledb
 bcc wal2json
-## bcc plv8
+bcc plv8
 ## bcc pljava
 
 exit 0

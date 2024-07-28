@@ -22,7 +22,7 @@ function bpc {
 
 
 bpc lolor
-#bpc spock40
+bpc spock40
 bpc snowflake
 
 bpc spock33
