@@ -21,11 +21,11 @@ pg15BuildV=1
 pg14V=14.13
 pg14BuildV=1
 
-pg13V=13.15
-pg13BuildV=3
+##pg13V=13.15
+##pg13BuildV=3
 
-pg12V=12.19
-pg12BuildV=3
+##pg12V=12.19
+##pg12BuildV=3
 
 foslotsV=1a
 foslotsBldV=1
@@ -56,7 +56,7 @@ citusFullV=12.1.5
 citusShortV=
 citusBuildV=1
 
-vectorFullV=0.7.3
+vectorFullV=0.7.4
 vectorShortV=
 vectorBuildV=1
 
@@ -88,9 +88,9 @@ debugFullV=1.6
 debugShortV=
 debugBuildV=1
 
-anonFullV=1.1.0
-anonShortV=
-anonBuildV=1
+##anonFullV=1.1.0
+##anonShortV=
+##anonBuildV=1
 
 ddlxFullV=0.17
 ddlxShortV=
@@ -113,9 +113,9 @@ pljavaFullV=1.6.6
 pljavaShortV=
 pljavaBuildV=1
 
-pgLogicalFullV=2.4.4
-pgLogicalShortV=
-pgLogicalBuildV=1
+##pgLogicalFullV=2.4.4
+##pgLogicalShortV=
+##pgLogicalBuildV=1
 
 partmanFullV=5.0.1
 partmanShortV=
@@ -126,11 +126,11 @@ hintplan15V=1.5.1
 hintplanShortV=
 hintplanBuildV=1
 
-timescaledbFullV=2.15.3
+timescaledbFullV=2.16.1
 timescaledbShortV=
 timescaledbBuildV=1
 
-cronFullV=1.6.3
+cronFullV=1.6.4
 cronShortV=
 cronBuildV=1
 

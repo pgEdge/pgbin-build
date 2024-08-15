@@ -57,6 +57,8 @@ function linuxCopySharedLibs {
   # bouncer (small enough lib to include by default)
   cp -Pv /$lib/libcares*        $shared_lib/.
 
+  cp  -Pv $lib/libdl*.so*       $shared_lib/.
+
   # oracle_fdw
   #oraclient=/opt/oracleinstantclient/instantclient_19_8
   #cp -Pv $oraclient/libclntsh.so.19.1 $shared_lib/.
