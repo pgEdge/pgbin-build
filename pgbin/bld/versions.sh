@@ -76,7 +76,7 @@ sqlitefdwFullV=2.4.0
 sqlitefdwShortV=
 sqlitefdwBuildV=1
 
-plProfilerFullVersion=4.2.4
+plProfilerFullVersion=4.2.5
 plProfilerShortVersion=
 plprofilerBuildV=1
 
