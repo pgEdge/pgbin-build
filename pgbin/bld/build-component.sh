@@ -255,9 +255,9 @@ function buildComp {
         src="$5"
         echo "#         src: $src"
 
-echo "# PATH = $PATH"
+	echo "# PATH = $PATH"
 
-        if [ "$comp" == "backrest" ] || [ "$comp" == "psqlodbc" ]; then
+        if [ "$comp" == "backrest" ] || [ "$comp" == "psqlodbc" ] || [ "$comp" == "bouncer" ]; then
             componentName="$comp$shortV-$fullV-$buildV-$buildOS"
         else
             componentName="$comp$shortV-pg$pgShortVersion-$fullV-$buildV-$buildOS"
