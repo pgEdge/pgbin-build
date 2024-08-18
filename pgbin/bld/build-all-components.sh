@@ -143,7 +143,7 @@ if [ "$1" == "ddlx" ]; then
 fi
 
 if [ "$1" == "bouncer" ]; then
-  build bouncer $bouncerFullV $2 bouncer
+  build bouncer $bouncerV $2 bouncer
 fi
 
 if [ "$1" == "sqlitefdw" ]; then

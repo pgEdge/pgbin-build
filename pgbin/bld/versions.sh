@@ -36,6 +36,9 @@ snwflkBldV=1
 wal2jV=2.6.0
 wal2jBldV=1
 
+bouncerV=1.23.1
+bouncerBldV=1
+
 decoderbufsFullV=1.7.0
 decoderbufsShortV=
 decoderbufsBuildV=1

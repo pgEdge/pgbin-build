@@ -447,7 +447,7 @@ function buildTimeScaleDBComponent {
         packageComponent $componentBundle
 }
 
-TEMP=`getopt -l no-tar, copy-bin,no-copy-bin,with-pgver:,with-pgbin:,build-curl:,build-hypopg:,build-postgis:,build-sqlitefdw:,build-orafce:,build-audit:,build-setuser:,build-permissions:,build-partman:,build-pldebugger:,build-pljava:,build-plv8:,build-plprofiler:,build-backrest:,build-spock33:,build-spock40:,build-snowflake:,build-foslots:,build-wal2json:,build-hintplan:,build-timescaledb:,build-cron:,build-citus:,build-vector: -- "$@"`
+TEMP=`getopt -l no-tar, copy-bin,no-copy-bin,with-pgver:,with-pgbin:,build-curl:,build-hypopg:,build-postgis:,build-sqlitefdw:,build-orafce:,build-audit:,build-setuser:,build-permissions:,build-partman:,build-pldebugger:,build-pljava:,build-plv8:,build-plprofiler:,build-backrest:,build-spock33:,build-spock40:,build-snowflake:,build-foslots:,build-wal2json:,build-hintplan:,build-timescaledb:,build-cron:,build-citus:,build-vector:,build-bouncer: -- "$@"`
 
 if [ $? != 0 ] ; then
 	echo "Required parameters missing, Terminating..."
@@ -477,6 +477,7 @@ while true; do
     --build-pljava ) buildPlJava=true; Source=$2; shift; shift ;;
     --build-plprofiler ) buildPlProfiler=true; plProfilerSource=$2; shift; shift ;;
     --build-backrest ) buildBackrest=true; Source=$2; shift; shift ;;
+    --build-bouncer ) buildBouncer=true; Source=$2; shift; shift ;;
     --build-pglogical ) buildPgLogical=true; Source=$2; shift; shift ;;
     --build-snowflake ) buildSnowflake=true; Source=$2; shift; shift ;;
     --build-spock33 ) buildSpock33=true; Source=$2; shift; shift ;;
@@ -610,6 +611,10 @@ fi
 
 if [[ $buildBackrest == "true" ]]; then
 	buildComp backrest "$backrestShortV" "$backrestFullV" "$backrestBuildV" "$Source"
+fi
+
+if [[ $buildBouncer == "true" ]]; then
+	buildComp bouncer  "" "$bouncerV" "$bouncerBldV" "$Source"
 fi
 
 if [[ $buildHintPlan == "true" ]]; then
