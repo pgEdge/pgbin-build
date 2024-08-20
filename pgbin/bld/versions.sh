@@ -6,7 +6,7 @@ lolorBldV=1
 spock40V=4.0.1
 spockBld40V=1
 
-spock33V=3.3.5
+spock33V=3.3.6
 spockBld33V=1
 
 pg17V=17beta3
