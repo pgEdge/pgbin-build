@@ -27,9 +27,6 @@ pg14BuildV=1
 ##pg12V=12.19
 ##pg12BuildV=3
 
-foslotsV=1a
-foslotsBldV=1
-
 snwflkV=2.2
 snwflkBldV=1
 

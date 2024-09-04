@@ -27,8 +27,4 @@ bpc snowflake
 
 bpc spock33
 
-#only used on pg14 & pg15 (fails to build on pg17)
-bpc foslots
-
-
 exit 0

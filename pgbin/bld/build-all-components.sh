@@ -70,10 +70,6 @@ if [ "$1" == "wal2json" ]; then
   build wal2json $wal2jV $2 wal2json
 fi
 
-if [ "$1" == "foslots" ]; then
-  build foslots $foslotsV $2 foslots
-fi
-
 if [ "$1" == "cron" ]; then
   build cron $cronFullV $2 cron
 fi
