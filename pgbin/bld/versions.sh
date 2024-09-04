@@ -113,10 +113,6 @@ pljavaFullV=1.6.6
 pljavaShortV=
 pljavaBuildV=1
 
-##pgLogicalFullV=2.4.4
-##pgLogicalShortV=
-##pgLogicalBuildV=1
-
 partmanFullV=5.0.1
 partmanShortV=
 partmanBuildV=1

@@ -478,7 +478,6 @@ while true; do
     --build-plprofiler ) buildPlProfiler=true; plProfilerSource=$2; shift; shift ;;
     --build-backrest ) buildBackrest=true; Source=$2; shift; shift ;;
     --build-bouncer ) buildBouncer=true; Source=$2; shift; shift ;;
-    --build-pglogical ) buildPgLogical=true; Source=$2; shift; shift ;;
     --build-snowflake ) buildSnowflake=true; Source=$2; shift; shift ;;
     --build-spock33 ) buildSpock33=true; Source=$2; shift; shift ;;
     --build-spock40 ) buildSpock40=true; Source=$2; shift; shift ;;
