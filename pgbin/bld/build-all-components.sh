@@ -43,7 +43,9 @@ if [ "$1" == "pldebugger" ]; then
 fi
 
 if [ "$1" == "hintplan" ]; then
-  if [ "$pgV" == "16" ]; then
+  if [ "$pgV" == "17" ]; then
+    build hintplan $hintplan17V $2 hintplan
+  elif [ "$pgV" == "16" ]; then
     build hintplan $hintplan16V $2 hintplan
   elif [ "$pgV" == "15" ]; then
     build hintplan $hintplan15V $2 hintplan

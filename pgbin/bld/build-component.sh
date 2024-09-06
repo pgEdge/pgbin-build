@@ -616,6 +616,8 @@ if [[ $buildHintPlan == "true" ]]; then
 		buildComp hintplan "$hintplanShortV" "$hintplan15V" "$hintplanBuildV" "$Source"
 	elif [ "$pgShortVersion" == "16" ]; then
 		buildComp hintplan "$hintplanShortV" "$hintplan16V" "$hintplanBuildV" "$Source"
+	elif [ "$pgShortVersion" == "17" ]; then
+		buildComp hintplan "$hintplanShortV" "$hintplan17V" "$hintplanBuildV" "$Source"
 	fi
 fi
 

@@ -21,12 +21,6 @@ pg15BuildV=1
 pg14V=14.13
 pg14BuildV=1
 
-##pg13V=13.15
-##pg13BuildV=3
-
-##pg12V=12.19
-##pg12BuildV=3
-
 snwflkV=2.2
 snwflkBldV=1
 
@@ -39,10 +33,6 @@ bouncerBldV=1
 decoderbufsFullV=1.7.0
 decoderbufsShortV=
 decoderbufsBuildV=1
-
-curlFullV=2.2.2
-curlShortV=
-curlBuildV=1
 
 backrestFullV=2.53
 backrestShortV=
@@ -88,14 +78,6 @@ debugFullV=1.8
 debugShortV=
 debugBuildV=1
 
-##anonFullV=1.1.0
-##anonShortV=
-##anonBuildV=1
-
-ddlxFullV=0.17
-ddlxShortV=
-ddlxBuildV=1
-
 auditFull15V=1.7.0
 auditFull16V=16.0
 auditShortV=
@@ -117,8 +99,9 @@ partmanFullV=5.0.1
 partmanShortV=
 partmanBuildV=1
 
-hintplan16V=1.6.0
-hintplan15V=1.5.1
+hintplan17V=1.7.0
+hintplan16V=1.6.1
+hintplan15V=1.5.2
 hintplanShortV=
 hintplanBuildV=1
 
@@ -133,17 +116,19 @@ cronBuildV=1
 isEL=no
 isEL8=no
 isEL9=no
+isEL10=no
 
 if [ -f /etc/os-release ]; then
   PLATFORM=`cat /etc/os-release | grep PLATFORM_ID | cut -d: -f2 | tr -d '\"'`
   if [ "$PLATFORM" == "el8" ]; then
     isEL=yes
     isEL8=yes
-    isEL9=no
   elif [ "$PLATFORM" == "el9" ]; then
     isEL=yes
-    isEL8=no
     isEL9=yes
+  elif [ "$PLATFORM" == "f40" ]; then
+    isEL=yes
+    isEL10=yes 
   fi
 fi
 
