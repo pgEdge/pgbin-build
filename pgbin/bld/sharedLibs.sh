@@ -30,7 +30,7 @@ function linuxCopySharedLibs {
   cp -Pv $lib/libk5crypto.so.*  $shared_lib/.
   cp -Pv $lib/libpam.so.*       $shared_lib/.
   cp -Pv $lib/libpython3.so     $shared_lib/.
-  cp -Pv $lib/libpython3.9*     $shared_lib/.
+  cp -Pv $lib/libpython3.11*    $shared_lib/.
   cp -Pv $lib/libnss3*          $shared_lib/.
   cp -Pv $lib/libnspr4*         $shared_lib/.
   cp -Pv $lib/libnssutil3*      $shared_lib/.
@@ -41,7 +41,6 @@ function linuxCopySharedLibs {
   cp -Pv $lib/libfreebl3.so     $shared_lib/.
   cp -Pv $lib/libcap*           $shared_lib/.
   cp -Pv $lib/libaudit*         $shared_lib/.
-  cp -Pv $lib/libresolv*        $shared_lib/.
   cp -Pv $lib/libicu*.so.*      $shared_lib/.
   ##cp -Pv $lib/libeconf*         $shared_lib/.
   cp -Pv $lib/liblzma.so.*      $shared_lib/.
@@ -53,11 +52,10 @@ function linuxCopySharedLibs {
   cp -Pv $lib/libLLVM*.so*      $shared_lib/.
   cp -Pv $lib/libffi*.so*       $shared_lib/.
   cp -Pv $lib/libossp-uuid.so.16* $shared_lib/.
-
-  # bouncer (small enough lib to include by default)
   cp -Pv /$lib/libcares*        $shared_lib/.
 
-  cp  -Pv $lib/libdl*.so*       $shared_lib/.
+  cp -Pv $lib/libresolv*        $shared_lib/.
+  cp -Pv $lib/libdl*.so*        $shared_lib/.
 
   # oracle_fdw
   #oraclient=/opt/oracleinstantclient/instantclient_19_8
@@ -86,7 +84,10 @@ function linuxCopySharedLibs {
 
   ## cleanups at the end #################
   cd $shared_lib
-  #ln -fs libcrypt.so.1 libcrypt.so
+  rm libresolv.so
+  ln -s libresolv.so.2 libresolv.so
+  rm libdl.so
+  ln -s libdl.so.2 libdl.so
 
   sl="$shared_lib/."
   rm -f $sl/*.a
