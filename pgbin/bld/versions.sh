@@ -10,7 +10,7 @@ spock33V=3.3.6
 spockBld33V=1
 
 pg17V=17rc1
-pg17BuildV=1
+pg17BuildV=2
 
 pg16V=16.4
 pg16BuildV=1
