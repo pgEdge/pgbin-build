@@ -34,7 +34,7 @@ decoderbufsFullV=1.7.0
 decoderbufsShortV=
 decoderbufsBuildV=1
 
-backrestFullV=2.53
+backrestFullV=2.53.1
 backrestShortV=
 backrestBuildV=1
 
@@ -70,7 +70,7 @@ plProfilerFullVersion=4.2.5
 plProfilerShortVersion=
 plprofilerBuildV=1
 
-plv8FullV=3.2.2
+plv8FullV=3.2.3
 plv8ShortV=
 plv8BuildV=1
 
