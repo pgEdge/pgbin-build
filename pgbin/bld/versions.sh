@@ -80,10 +80,11 @@ debugBuildV=1
 
 auditFull15V=1.7.0
 auditFull16V=16.0
+auditFull17V=17.0
 auditShortV=
 auditBuildV=1
 
-setuserFullV=4.0.1
+setuserFullV=4.1.0
 setuserShortV=
 setuserBuildV=1
 

@@ -544,6 +544,8 @@ if [[ $buildAudit == "true" ]]; then
 		buildComp audit "$auditShortV" "$auditFull15V" "$auditBuildV" "$Source"
 	elif [ "$pgShortVersion" == "16" ]; then
 		buildComp audit "$auditShortV" "$auditFull16V" "$auditBuildV" "$Source"
+	elif [ "$pgShortVersion" == "17" ]; then
+		buildComp audit "$auditShortV" "$auditFull17V" "$auditBuildV" "$Source"
 	fi
 fi
 
