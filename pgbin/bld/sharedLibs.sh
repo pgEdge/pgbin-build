@@ -26,7 +26,6 @@ function linuxCopySharedLibs {
   cp -Pv $lib/liblber*          $shared_lib/.
   cp -Pv $lib/libsasl2*         $shared_lib/.
   cp -Pv $lib/libevent*         $shared_lib/.
-  cp -Pv $lib/libreadline*      $shared_lib/.
   cp -Pv $lib/libk5crypto.so.*  $shared_lib/.
   cp -Pv $lib/libpam.so.*       $shared_lib/.
   cp -Pv $lib/libpython3.so     $shared_lib/.
@@ -55,45 +54,32 @@ function linuxCopySharedLibs {
   cp -Pv /$lib/libcares*        $shared_lib/.
 
   cp -Pv $lib/libresolv*        $shared_lib/.
-  cp -Pv $lib/libdl*.so*        $shared_lib/.
 
-  # oracle_fdw
-  #oraclient=/opt/oracleinstantclient/instantclient_19_8
-  #cp -Pv $oraclient/libclntsh.so.19.1 $shared_lib/.
-  #cp -Pv $oraclient/libclntshcore.so.19.1 $shared_lib/.
-  #cp -Pv $oraclient/libmql1.so        $shared_lib/.
-  #cp -Pv $oraclient/libipc1.so        $shared_lib/.
-  #cp -Pv $oraclient/libnnz19.so       $shared_lib/.
-  #cp -Pv $lib/libselinux*           $shared_lib/.
-  #cp -Pv $lib/libaio*               $shared_lib/.
-  #cp -Pv $lib/libtirpc*             $shared_lib/.
+  cp -Pv $lib/libzstd*.so*      $shared_lib/.
+  cp -Pv $lib/liblz4*.so*       $shared_lib/.
+  cp -Pv $lib/libuuid*.so*      $shared_lib/.
+  cp -Pv $lib/libblkid*.so*     $shared_lib/.
+  cp -Pv $lib/libgcrypt*.so*    $shared_lib/.
+  cp -Pv $lib/libmount*.so*     $shared_lib/.
 
-  # tds_fdw
-  #cp -Pv $lib/libsybdb.so.*           $shared_lib/.
-  #cp -Pv $lib/libhogweed.so.*         $shared_lib/.
-  #cp -Pv $lib/libgnutls.so.*          $shared_lib/.
-  #cp -Pv $lib/libnettle.so.*          $shared_lib/.
-  #cp -Pv $lib/libgmp.so.*             $shared_lib/.
-  #cp -Pv $lib/libp11-kit.so.*         $shared_lib/.
-  #cp -Pv $lib/libtasn1.so.*           $shared_lib/.
-  #cp -Pv $lib/libffi.so.*             $shared_lib/.
-
-  # fixup for oraclefdw
-  #cd $sl
-  #ln -s libnsl.so.2 libnsl.so.1
+  ##cp -Pv $lib/libdl*.so*      $shared_lib/.
+  ##cp -Pv $lib/libtinfo*         $shared_lib/.
+  ##cp -Pv $lib/libpcre2-8*.so*   $shared_lib/.
 
   ## cleanups at the end #################
   cd $shared_lib
   rm libresolv.so
   ln -s libresolv.so.2 libresolv.so
-  rm libdl.so
-  ln -s libdl.so.2 libdl.so
+  ##rm libdl.so
+  ##ln -s libdl.so.2 libdl.so
 
   sl="$shared_lib/."
   rm -f $sl/*.a
   rm -f $sl/*.la
   rm -f $sl/*libboost*test*
 
+  cd $sl
+  patchelf --set-rpath '$ORIGIN/../lib' *
 }
 
 ########################################################

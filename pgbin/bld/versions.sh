@@ -13,13 +13,13 @@ pg17V=17rc1
 pg17BuildV=2
 
 pg16V=16.4
-pg16BuildV=1
+pg16BuildV=2
 
 pg15V=15.8
-pg15BuildV=1
+pg15BuildV=2
 
 pg14V=14.13
-pg14BuildV=1
+pg14BuildV=2
 
 snwflkV=2.2
 snwflkBldV=1
