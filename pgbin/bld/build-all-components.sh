@@ -126,6 +126,10 @@ if [ "$1" == "snowflake" ]; then
   build snowflake $snwflkV $2  snowflake
 fi
 
+if [ "$1" == "spock41" ]; then
+  build spock41 $spock41V $2  spock41
+fi
+
 if [ "$1" == "spock40" ]; then
   build spock40 $spock40V $2  spock40
 fi

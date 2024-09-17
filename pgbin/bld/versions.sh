@@ -3,7 +3,10 @@
 lolorV=1.2
 lolorBldV=1
 
-spock40V=4.0.1
+spock41V=4.1.0.1
+spockBld40V=1
+
+spock40V=4.0.3
 spockBld40V=1
 
 spock33V=3.3.6
