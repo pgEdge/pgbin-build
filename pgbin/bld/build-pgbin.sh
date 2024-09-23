@@ -244,25 +244,25 @@ function updateSharedLibPathsForLinux {
   echo "# updateSharedLibPathsForLinux()"
 
   cd $buildLocation/bin
-  echo "#     looping thru executables"
+  ##echo "#     looping thru executables"
   for file in `ls -d *` ; do
-    echo "### $file"
+    ##echo "### $file"
     patchelf --set-rpath '${ORIGIN}/../lib' "$file"
   done
 
   libSuffix="*so*"
 
   cd $buildLocation/lib
-  echo "#     looping thru shared objects"
+  ##echo "#     looping thru shared objects"
   for file in `ls -d $libSuffix 2>/dev/null` ; do
-    echo "### $file"
+    ##echo "### $file"
     patchelf --set-rpath '${ORIGIN}/../lib' "$file"
   done
 
-  echo "#     looping thru lib/postgresql "
+  ##echo "#     looping thru lib/postgresql "
   if [[ -d "$buildLocation/lib/postgresql" ]]; then
     cd $buildLocation/lib/postgresql
-    echo "### $file"
+    ##echo "### $file"
     for file in `ls -d $libSuffix 2>/dev/null` ; do
         patchelf --set-rpath '${ORIGIN}/../../lib' "$file"
     done
