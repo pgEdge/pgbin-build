@@ -1,6 +1,8 @@
 set -x
 set -e
 
+$SOURCE/get41devel.sh
+
 ./build-all-components.sh spock41 16 --copy-bin
 ./build-all-components.sh spock41 17 --copy-bin
 
@@ -11,10 +13,11 @@ cd $PGE
 
 
 cd $DEV
-h_dir=$HIST/devel-spock41
+h=devel-spock41
+h_dir=$HIST/$h
 rm -rf $h_dir
 mkdir $h_dir
 cp -v $OUT/spock41* $h_dir/.
 
-./copy-to-devel.sh $h_dir
+./copy-to-devel.sh $h
 
