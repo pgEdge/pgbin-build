@@ -1,7 +1,7 @@
 set -x
 set -e
 
-$SOURCE/get41devel.sh
+#$SOURCE/get41devel.sh
 
 ./build-all-components.sh spock41 16 --copy-bin
 ./build-all-components.sh spock41 17 --copy-bin
