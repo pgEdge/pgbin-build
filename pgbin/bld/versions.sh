@@ -21,9 +21,6 @@ pg16BuildV=2
 pg15V=15.8
 pg15BuildV=2
 
-pg14V=14.13
-pg14BuildV=2
-
 snwflkV=2.2
 snwflkBldV=1
 

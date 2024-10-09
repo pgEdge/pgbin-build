@@ -75,7 +75,7 @@ function checkPostgres {
 	else
 		pgSrcV=`$pgSrcDir/configure --version | head -1 | awk '{print $3}'`
 		echo "pgSrcV=$pgSrcV/rc"
-		if [[ "${pgSrcV/rc}" =~ ^17d* ]]; then
+		if [[ "${pgSrcV/rc}" =~ ^17.* ]]; then
 			pgShortV="17"
 			bndlPrfx=pg17
 			if [ "$OS" == "osx" ]; then
@@ -102,20 +102,6 @@ function checkPostgres {
 				pgOPT="--with-zstd --with-lz4 --with-icu"
 			fi
                         
-		elif [[ "${pgSrcV/rc}" =~ ^14.* ]]; then
-			pgShortV="14"
-			bndlPrfx=pg14
-			pgOPT="--with-lz4"
-
-		elif [[ "${pgSrcV/rc}" =~ ^13.* ]]; then
-			pgShortV="13"
-			bndlPrfx=pg13
-			pgOPT=""
-
-		elif [[ "${pgSrcV/rc}" =~ ^12.* ]]; then
-			pgShortV="12"
-			bndlPrfx=pg12
-			pgOPT=""
 		else
 			echo "ERROR: Could not determine Postgres Version for '$pgSrcV'"
 			exit 1
@@ -147,7 +133,7 @@ function buildPostgres {
 
         pgS="$pgShortV"
 
-	if [ $pgS == "14" ] || [ $pgS == "15" ] || [ $pgS == "16" ] || [ $pgS == "17" ]; then
+	if [ $pgS == "15" ] || [ $pgS == "16" ] || [ $pgS == "17" ]; then
 		patcher "$DIFF1"
 		patcher "$DIFF2"
 		patcher "$DIFF3"

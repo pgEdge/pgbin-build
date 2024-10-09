@@ -59,8 +59,6 @@ function export_patches {
 }
 
 
-
-
 function export_patch {
   DIFF="$1"
   dirp="$2"
@@ -88,25 +86,7 @@ function export_patch {
 majorV="$1"
 optional="$2"
 
-if [ "$majorV" == "12" ]; then
-  pgV=$pg12V
-  pgBuildV=$pg12BuildV
-
-elif [ "$majorV" == "13" ]; then
-  pgV=$pg13V
-  pgBuildV=$pg13BuildV
-
-elif [ "$majorV" == "14" ]; then
-  pgV=$pg14V
-  pgBuildV=$pg14BuildV
-
-  p1=pg14-010-allow_logical_decoding_on_standbys.diff
-  p2=pg14-015-attoptions.diff
-  p3=pg14-020-LOG-to-DEBUG1.diff
-  p4=pg14-025-logical_commit_clock.diff
-  p5=pg14-030-per-subtrans-commit-ts.diff
-
-elif [ "$majorV" == "15" ]; then
+if [ "$majorV" == "15" ]; then
   pgV=$pg15V
   pgBuildV=$pg15BuildV
 
@@ -135,6 +115,9 @@ elif [ "$majorV" == "17" ]; then
   p4=pg17-030-per-subtrans-commit-ts.diff
   p5=pg17-090-init_template_fix.diff
 
+else
+  echo "Yikes!! $majorV"
+  exit 1
 fi
 
 export_patches $p1 $p2 $p3 $p4 $p5
