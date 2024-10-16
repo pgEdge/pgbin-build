@@ -172,9 +172,15 @@ function updateSharedLibs {
           cp -P $lib64/libproto*.so* $shared_lib/.
 	elif [ "$comp" == "postgis" ]; then
           cp -P $lib64/libprotobuf*.so* $shared_lib/.
-          cp -P $lib64/libgeos*.so*  $shared_lib/.
-          cp -P $lib64/libgdal*.so*  $shared_lib/.
-          cp -P $lib64/libproj*.so*  $shared_lib/.
+          if [ `arch` == "x86_64" ]; then
+            cp -P /usr/local/lib/libgeos*.so*  $shared_lib/.
+            cp -P /usr/local/lib/libgdal*.so*  $shared_lib/.
+            cp -P /usr/local/lib/libproj*.so*  $shared_lib/.
+          else
+            cp -P $lib64/libgeos*.so*  $shared_lib/.
+            cp -P $lib64/libgdal*.so*  $shared_lib/.
+            cp -P $lib64/libproj*.so*  $shared_lib/.
+          fi
           cp -P $lib64/libtiff*.so*  $shared_lib/.
           cp -P $lib64/libwebp.so*  $shared_lib/.
           cp -P $lib64/libjbig.so*  $shared_lib/.
