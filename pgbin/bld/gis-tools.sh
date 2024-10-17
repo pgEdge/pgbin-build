@@ -1,13 +1,16 @@
 
-## we are only using this stuff on the EL8 AMD build box
-## cuz postgis 3.5.0 needs 3.9.x of GEOS.   These tools do NOT seem to want to
-## be built with gcc-toolset-13 so disable there
+## we are only using this build script on the EL8 AMD build box because
+## postgis 3.5.0 needs 3.9.x of GEOS along with a newer version of PROJ.
+## (In EL9 the default version of these compnents is new enough)
+## These components do NOT allow to be built with gcc-toolset-13, so 
+## make sure it is not enabled when running this build script.
 
 sudo mkdir -p /opt/gis-tools
 sudo chown $USER:$USER /opt/gis-tools
 
+sudo yum install jasper-devel libtiff-devel
+
 function buildGDAL {
-  sudo yum install jasper-devel
   cd /opt/gis-tools
   rm -rf gdal*
   VER=3.2.3
@@ -36,7 +39,7 @@ function buildGeos {
 function buildProj {
   cd /opt/gis-tools
   rm -rf proj*
-  VER=6.0.0
+  VER=8.2.0
   wget http://download.osgeo.org/proj/proj-$VER.tar.gz
   tar -xf proj-$VER.tar.gz
   cd proj-$VER
