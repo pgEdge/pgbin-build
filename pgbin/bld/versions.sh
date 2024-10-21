@@ -106,7 +106,7 @@ hintplan15V=1.5.2
 hintplanShortV=
 hintplanBuildV=1
 
-timescaledbFullV=2.16.1
+timescaledbFullV=2.17.0
 timescaledbShortV=
 timescaledbBuildV=1
 
