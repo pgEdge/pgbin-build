@@ -1,7 +1,7 @@
 # PGBIN-BUILD 
 
 
-## Creating an AMD64 or ARM64 build environment on EL8
+## Creating an AMD64-EL8 or ARM64-EL9 build environment
 
 ### 1.) Setup a CLI environment (see https://github.com/pgEdge/cli for more info)
 ```
@@ -9,6 +9,7 @@ cd ~
 mkdir dev
 cd dev
 git clone https://github.com/pgEdge/cli
+cd cli/devel/setup  ...
 ```
 
 ### 2.) Setup a BUILD (BLD) environment
