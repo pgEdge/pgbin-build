@@ -6,19 +6,19 @@ lolorBldV=1
 spock41V=4.1devel
 spockBld41V=2
 
-spock40V=4.0.9
+spock40V=4.0.10
 spockBld40V=1
 
 spock33V=3.3.6
 spockBld33V=1
 
-pg17V=17.3
+pg17V=17.4
 pg17BuildV=1
 
-pg16V=16.7
+pg16V=16.8
 pg16BuildV=1
 
-pg15V=15.11
+pg15V=15.12
 pg15BuildV=1
 
 snwflkV=2.2
