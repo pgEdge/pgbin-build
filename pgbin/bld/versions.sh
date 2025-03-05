@@ -56,7 +56,7 @@ hypopgBuildV=1
 
 postgisFullV=3.5.0
 postgisShortV=
-postgisBuildV=1
+postgisBuildV=2
 
 orafceFullV=4.13.4
 orafceShortV=
