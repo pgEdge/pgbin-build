@@ -1,5 +1,9 @@
 # PGBIN-BUILD 
 
+The steps listed below are for:
+
+  * RHEL (Rocky or Alma) version 8 on AMD architecture
+  * RHEL (Rocky or Alma) version 9 on ARM architecture
 
 ## Creating an AMD64-EL8 or ARM64-EL9 build environment
 
