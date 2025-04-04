@@ -186,6 +186,9 @@ function updateSharedLibs {
           cp -P $lib64/libjbig.so*  $shared_lib/.
           cp -P $lib64/libjpeg.so*  $shared_lib/.
           cp -P $lib64/libcurl*.so*  $shared_lib/.
+          cp -P $lib64/libssh*.so* $shared_lib/.
+          cp -P $lib64/libpsl*.so* $shared_lib/.
+          cp -P $lib64/libbrotli*.so* $shared_lib/.
         fi
 }
 
