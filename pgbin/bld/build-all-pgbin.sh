@@ -5,7 +5,7 @@ pgSrc=$SOURCE/postgresql
 binBld=/opt/pgbin-build/builds
 source ./versions.sh
 
-SPOCK_REPO=spock-private
+SPOCK_REPO=spock
 SPOCK_BRANCH=main
 
 
