@@ -1,0 +1,54 @@
+*** bld41_to_devel.sh	2024-05-18
+--- bld41_to_devel.sh	2024-05-18
+***************
+*** 6,8 ****
+-./build-all-components.sh spock41 16 --copy-bin
+-./build-all-components.sh spock41 17 --copy-bin
+-
+-rm -f $OUT/spock41*
++./build-all-components.sh spock50 16 --copy-bin
++./build-all-components.sh spock50 17 --copy-bin
++
++rm -f $OUT/spock50*
+***************
+*** 16,17 ****
+-h=devel-spock41
++h=devel-spock50
+***************
+*** 20 ****
+-cp -v $OUT/spock41* $h_dir/.
++cp -v $OUT/spock50* $h_dir/.
+*** build-all-components.sh	2024-05-18
+--- build-all-components.sh	2024-05-18
+***************
+*** 129,131 ****
+-if [ "$1" == "spock41" ]; then
+-  build spock41 $spock41V $2  spock41
+-fi
++if [ "$1" == "spock50" ]; then
++  build spock50 $spock50V $2  spock50
++fi
+*** build-component.sh	2024-05-18
+--- build-component.sh	2024-05-18
+***************
+*** 454 ****
+-TEMP=`getopt -l no-tar, copy-bin,no-copy-bin,with-pgver:,with-pgbin:,build-curl:,build-hypopg:,build-postgis:,build-sqlitefdw:,build-orafce:,build-audit:,build-setuser:,build-permissions:,build-partman:,build-pldebugger:,build-pljava:,build-plv8:,build-plprofiler:,build-backrest:,build-spock33:,build-spock40:,build-spock41:,build-snowflake:,build-wal2json:,build-hintplan:,build-timescaledb:,build-cron:,build-citus:,build-vector:,build-bouncer: -- "$@"`
++TEMP=`getopt -l no-tar, copy-bin,no-copy-bin,with-pgver:,with-pgbin:,build-curl:,build-hypopg:,build-postgis:,build-sqlitefdw:,build-orafce:,build-audit:,build-setuser:,build-permissions:,build-partman:,build-pldebugger:,build-pljava:,build-plv8:,build-plprofiler:,build-backrest:,build-spock33:,build-spock40:,build-spock50:,build-snowflake:,build-wal2json:,build-hintplan:,build-timescaledb:,build-cron:,build-citus:,build-vector:,build-bouncer: -- "$@"`
+***************
+*** 488 ****
+-    --build-spock41 ) buildSpock41=true; Source=$2; shift; shift ;;
++    --build-spock50 ) buildSpock50=true; Source=$2; shift; shift ;;
+***************
+*** 590,591 ****
+-if [[ $buildSpock41 == "true" ]]; then
+-	buildComp spock41  "" "$spock41V" "$spockBld41V" "$Source"
++if [[ $buildSpock50 == "true" ]]; then
++	buildComp spock50  "" "$spock50V" "$spockBld50V" "$Source"
+*** versions.sh	2024-05-18
+--- versions.sh	2024-05-18
+***************
+*** 6,7 ****
+ spock41V=4.1devel
+ spockBld41V=2
++spock50V=5.0.0-devel
+
