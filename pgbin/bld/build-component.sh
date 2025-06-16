@@ -197,7 +197,7 @@ function updateSharedLibs {
           cp -P $lib64/libsasl2* $shared_lib/.
 
           # Use latest released PostgreSQL libpq
-          pg_dir="$IN/postgres/pg17"
+          pg_dir="/opt/pgcomponent/pg17"
           if [ ! -d "$pg_dir" ]; then
             echo "Error: PostgreSQL 17 directory not found at $pg_dir"
             return 1
