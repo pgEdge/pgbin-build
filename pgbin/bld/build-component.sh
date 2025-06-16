@@ -195,7 +195,16 @@ function updateSharedLibs {
           cp -P $lib64/libldap*  $shared_lib/.
           cp -P $lib64/liblber*  $shared_lib/.
           cp -P $lib64/libsasl2*  $shared_lib/.
-          cp -P $PGHOME/lib/libpq* $shared_lib/.
+
+          # Get the latest PostgreSQL version directory
+          latest_pg_dir=$(ls -d "$IN/postgres"/pg[0-9]* 2>/dev/null | sort -V | tail -n1)
+          if [ -z "$latest_pg_dir" ]; then
+            echo "Error: No PostgreSQL installation found in $IN/postgres"
+            return 1
+          fi
+
+          echo "Using libpq from latest PostgreSQL: $latest_pg_dir"
+          cp -P "$latest_pg_dir/lib/libpq"* $shared_lib/.
         fi
 }
 
