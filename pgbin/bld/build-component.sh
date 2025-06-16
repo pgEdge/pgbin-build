@@ -189,6 +189,13 @@ function updateSharedLibs {
           cp -P $lib64/libssh*.so* $shared_lib/.
           cp -P $lib64/libpsl*.so* $shared_lib/.
           cp -P $lib64/libbrotli*.so* $shared_lib/.
+        elif [ "$comp" == "backrest" ]; then
+          cp -P $lib64/libcrypto*  $shared_lib/.
+          cp -P $lib64/libssl*  $shared_lib/.
+          cp -P $lib64/libldap*  $shared_lib/.
+          cp -P $lib64/liblber*  $shared_lib/.
+          cp -P $lib64/libsasl2*  $shared_lib/.
+          cp -P $PGHOME/lib/libpq* $shared_lib/.
         fi
 }
 
