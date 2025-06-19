@@ -13,13 +13,13 @@ spock33V=3.3.6
 spockBld33V=1
 
 pg17V=17.5
-pg17BuildV=1
+pg17BuildV=2
 
 pg16V=16.9
-pg16BuildV=1
+pg16BuildV=2
 
 pg15V=15.13
-pg15BuildV=1
+pg15BuildV=2
 
 snwflkV=2.2
 snwflkBldV=1
