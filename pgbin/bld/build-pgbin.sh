@@ -1,3 +1,5 @@
+# Source the common SBOM generator
+source "$(dirname "$0")/generate_sbom.sh"
 
 set -e
 # set -x
@@ -320,6 +322,9 @@ function createBundle {
 	cd $baseDir/$workDir/build
 
 	Tar="$bndlPrfx-$pgSrcV-$pgBldV-$OS"
+
+	# Generate SBOM for the server before packaging
+	generate_sbom "$Tar" "$baseDir/$workDir/build/$Tar"
 
 	Cmd="tar -czf $Tar.tgz $Tar $bndlPrfx-$pgSrcV-$pgBldV-$OS"
 
