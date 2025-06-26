@@ -51,6 +51,7 @@ function generate_sbom {
             found_pkg=false
             supplier="NOASSERTION"
             downloadLocation="NOASSERTION"
+            purl="$pkg"
             if command -v rpm &>/dev/null; then
                 if rpm -qf "$sofile" &>/dev/null; then
                     pkg=$(rpm -qf "$sofile" 2>/dev/null)
@@ -63,6 +64,15 @@ function generate_sbom {
                     [ -z "$supplier" ] && supplier="NOASSERTION"
                     downloadLocation=$(rpm -q --qf '%{URL}' "$pkg" 2>/dev/null)
                     [ -z "$downloadLocation" ] && downloadLocation="NOASSERTION"
+                    # Prefix supplier if not already
+                    if [ -n "$supplier" ] && [ "$supplier" != "NOASSERTION" ]; then
+                      case "$supplier" in
+                        Organization:*|Person:*) ;;
+                        *) supplier="Organization: $supplier" ;;
+                      esac
+                    fi
+                    # Set purl for RPMs (assuming redhat, adjust if needed)
+                    purl="pkg:rpm/redhat/$pkg@$version"
                     found_pkg=true
                 else
                     # Try to find the same library in /lib64
@@ -78,6 +88,13 @@ function generate_sbom {
                         [ -z "$supplier" ] && supplier="NOASSERTION"
                         downloadLocation=$(rpm -q --qf '%{URL}' "$pkg" 2>/dev/null)
                         [ -z "$downloadLocation" ] && downloadLocation="NOASSERTION"
+                        if [ -n "$supplier" ] && [ "$supplier" != "NOASSERTION" ]; then
+                          case "$supplier" in
+                            Organization:*|Person:*) ;;
+                            *) supplier="Organization: $supplier" ;;
+                          esac
+                        fi
+                        purl="pkg:rpm/redhat/$pkg@$version"
                         found_pkg=true
                     fi
                 fi
@@ -98,8 +115,15 @@ function generate_sbom {
                     [ -z "$license" ] && license="NOASSERTION"
                     supplier=$(apt-cache show "$pkg" 2>/dev/null | grep -i '^Maintainer:' | head -1 | cut -d' ' -f2-)
                     [ -z "$supplier" ] && supplier="NOASSERTION"
+                    if [ -n "$supplier" ] && [ "$supplier" != "NOASSERTION" ]; then
+                      case "$supplier" in
+                        Organization:*|Person:*) ;;
+                        *) supplier="Person: $supplier" ;;
+                      esac
+                    fi
                     downloadLocation=$(apt-cache show "$pkg" 2>/dev/null | grep -i '^Homepage:' | head -1 | cut -d' ' -f2-)
                     [ -z "$downloadLocation" ] && downloadLocation="NOASSERTION"
+                    purl="pkg:deb/debian/$pkg@$version"
                     found_pkg=true
                 fi
             fi
@@ -110,6 +134,7 @@ function generate_sbom {
                    --arg pkg "$pkg" \
                    --arg supplier "$supplier" \
                    --arg downloadLocation "$downloadLocation" \
+                   --arg purl "$purl" \
                    '.packages += [{
                       name: $name,
                       SPDXID: ("SPDXRef-Package-" + $name),
@@ -121,7 +146,7 @@ function generate_sbom {
                       externalRefs: [{
                         referenceCategory: "PACKAGE-MANAGER",
                         referenceType: "purl",
-                        referenceLocator: $pkg
+                        referenceLocator: $purl
                       }]
                     }]' "$sbom_file" > "${sbom_file}.tmp" && mv "${sbom_file}.tmp" "$sbom_file"
             fi
@@ -150,9 +175,9 @@ function generate_sbom {
        '(.packages[] | select(.name == $component)) |= (.licenseConcluded = "PostgreSQL" | .licenseDeclared = "PostgreSQL")' \
        "$sbom_file" > "${sbom_file}.tmp" && mv "${sbom_file}.tmp" "$sbom_file"
 
-    # Set supplier to pgEdge for our own components (postgresql, spock, lolor, snowflake, and the main component)
+    # Always set supplier to Organization: pgEdge for our own components (postgresql, spock, lolor, snowflake, and the main component)
     jq --arg component "$component_name" \
-       '(.packages[] | select((.name | test("postgresql|spock|lolor|snowflake")) or (.name == $component))) |= (.supplier = "pgEdge")' \
+       '(.packages[] | select((.name | test("postgresql|spock|lolor|snowflake")) or (.name == $component))) |= (.supplier = "Organization: pgEdge")' \
        "$sbom_file" > "${sbom_file}.tmp" && mv "${sbom_file}.tmp" "$sbom_file"
 
     # Add checksums to files
