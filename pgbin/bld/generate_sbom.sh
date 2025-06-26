@@ -4,7 +4,7 @@
 function generate_sbom {
     local component_name="$1"
     local build_location="$2"
-    local sbom_file="$build_location/${component_name}-sbom.json"
+    local sbom_file="$build_location/${component_name}-sbom.spdx.json"
     
     # Check if syft is installed
     if ! command -v syft &> /dev/null; then
@@ -12,152 +12,162 @@ function generate_sbom {
         sudo curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sudo sh -s -- -b /usr/local/bin
     fi
 
-    # Check if jq is installed
-    if ! command -v jq &> /dev/null; then
-        echo "Error: jq is required for SBOM generation. Please install jq first."
-        return 1
-    fi
-
-    # Generate initial SBOM using syft
-    echo "Generating SBOM for $component_name..."
+    # Generate SPDX SBOM using syft
+    echo "Generating SPDX SBOM for $component_name..."
     local temp_sbom=$(mktemp)
+    echo "Syft command: syft '$build_location' --output spdx-json='$temp_sbom'"
+    syft "$build_location" --output spdx-json="$temp_sbom"
+    syft_exit_code=$?
+    echo "Syft exit code: $syft_exit_code"
+    if [ $syft_exit_code -ne 0 ]; then
+        echo "Error: Failed to generate SPDX SBOM. Syft exited with code $syft_exit_code."
+        cat "$temp_sbom"
+        exit 1
+    fi
+    if [ ! -s "$temp_sbom" ]; then
+        echo "Error: Syft did not produce a valid SBOM file ($temp_sbom is empty)."
+        exit 1
+    fi
+    echo "Syft SBOM generated at $temp_sbom"
 
-    # Print the syft command for debugging
-    echo "Syft command: syft '$build_location' --output json='$temp_sbom'"
-    syft "$build_location" --output json="$temp_sbom"
+    mv "$temp_sbom" "$sbom_file"
 
-    # Create the simplified SBOM structure
-    cat > "$sbom_file" << EOF
-{
-    "component": {
-        "name": "$component_name",
-        "version": "$componentFullVersion",
-        "type": "postgresql-extension",
-        "license": "PostgreSQL",
-        "hash": "$(sha256sum "$build_location"/*.so 2>/dev/null | awk '{print $1}' || echo "N/A")"
-    },
-    "dependencies": {
-        "libraries": [],
-        "binaries": [],
-        "extensions": []
-    }
-}
-EOF
+    # Ensure .packages array exists in SPDX file
+    jq 'if has("packages") then . else . + {packages: []} end' "$sbom_file" > "${sbom_file}.tmp" && mv "${sbom_file}.tmp" "$sbom_file"
 
-    # Extract dependencies as a JSON array
-    deps_json=$(jq '[.artifacts[] | select(type == "object" and .type != "directory") | {
-        name: (.name // "Unknown"),
-        version: (.version // "N/A"),
-        license: (
-            if (.licenses? | type == "array" and (.licenses?|length) > 0)
-            then .licenses[0].value // .licenses[0] // "Unknown"
-            else "Unknown"
-            end
-        ),
-        hash: (
-            if (.metadata.checksums? | type == "array" and (.metadata.checksums?|length) > 0)
-            then .metadata.checksums[0].value // .metadata.checksums[0] // "N/A"
-            else "N/A"
-            end
-        )
-    }]' "$temp_sbom")
-
-    # Split dependencies into libraries, binaries, and extensions
-    libs=$(echo "$deps_json" | jq '[.[] | select(.name|test("\\.so$"))]')
-    bins=$(echo "$deps_json" | jq '[.[] | select(.name|test("bin"))]')
-    exts=$(echo "$deps_json" | jq '[.[] | select((.name|test("\\.so$")|not) and (.name|test("bin")|not))]')
-
-    # Update the SBOM file with syft-detected dependencies
-    jq --argjson libs "$libs" --argjson bins "$bins" --argjson exts "$exts" \
-       '.dependencies.libraries = $libs | .dependencies.binaries = $bins | .dependencies.extensions = $exts' \
-       "$sbom_file" > "${sbom_file}.tmp" && mv "${sbom_file}.tmp" "$sbom_file"
-
-    # Post-process: Add all .so files in lib/ as libraries if not already present, and try to get version/license/hash from system
+    # Enrich SPDX SBOM with third-party RPM/DEB info for .so files in lib/
     if [ -d "$build_location/lib" ]; then
-        find "$build_location/lib" -type f -name '*.so*' | while read sofile; do
+        for sofile in "$build_location"/lib/*.so*; do
+            [ -e "$sofile" ] || continue
             so_name=$(basename "$sofile")
-            version="N/A"
-            license="Unknown"
-            hash="N/A"
+            # Check if already present in SPDX
+            if jq -e --arg name "$so_name" '.packages[]? | select(.name == $name)' "$sbom_file" > /dev/null; then
+                continue
+            fi
 
-            # Try RPM-based lookup
+            version="N/A"
+            license="NOASSERTION"
+            pkg="Unknown"
             found_pkg=false
+            supplier="NOASSERTION"
+            downloadLocation="NOASSERTION"
             if command -v rpm &>/dev/null; then
-                set +e
-                pkg=$(rpm -qf "$sofile" 2>&1)
-                rpm_status=$?
-                set -e
-                if [[ $rpm_status -ne 0 ]] || echo "$pkg" | grep -q "is not owned by any package"; then
-                    # Try /lib64/ fallback
-                    so_basename=$(basename "$sofile")
-                    sysfile="/lib64/$so_basename"
-                    set +e
-                    pkg=$(rpm -qf "$sysfile" 2>&1)
-                    rpm_status=$?
-                    set -e
-                fi
-                if [[ $rpm_status -eq 0 ]] && ! echo "$pkg" | grep -q "is not owned by any package"; then
+                if rpm -qf "$sofile" &>/dev/null; then
+                    pkg=$(rpm -qf "$sofile" 2>/dev/null)
                     version=$(rpm -q --qf '%{VERSION}-%{RELEASE}' "$pkg" 2>/dev/null)
                     license=$(rpm -q --qf '%{LICENSE}' "$pkg" 2>/dev/null)
+                    [ -z "$license" ] && license=$(rpm -q --qf '%{LICENSES}' "$pkg" 2>/dev/null)
+                    [ -z "$license" ] && license="NOASSERTION"
+                    supplier=$(rpm -q --qf '%{VENDOR}' "$pkg" 2>/dev/null)
+                    [ -z "$supplier" ] && supplier=$(rpm -q --qf '%{PACKAGER}' "$pkg" 2>/dev/null)
+                    [ -z "$supplier" ] && supplier="NOASSERTION"
+                    downloadLocation=$(rpm -q --qf '%{URL}' "$pkg" 2>/dev/null)
+                    [ -z "$downloadLocation" ] && downloadLocation="NOASSERTION"
                     found_pkg=true
+                else
+                    # Try to find the same library in /lib64
+                    sysfile="/lib64/$(basename "$sofile")"
+                    if [ -f "$sysfile" ] && rpm -qf "$sysfile" &>/dev/null; then
+                        pkg=$(rpm -qf "$sysfile" 2>/dev/null)
+                        version=$(rpm -q --qf '%{VERSION}-%{RELEASE}' "$pkg" 2>/dev/null)
+                        license=$(rpm -q --qf '%{LICENSE}' "$pkg" 2>/dev/null)
+                        [ -z "$license" ] && license=$(rpm -q --qf '%{LICENSES}' "$pkg" 2>/dev/null)
+                        [ -z "$license" ] && license="NOASSERTION"
+                        supplier=$(rpm -q --qf '%{VENDOR}' "$pkg" 2>/dev/null)
+                        [ -z "$supplier" ] && supplier=$(rpm -q --qf '%{PACKAGER}' "$pkg" 2>/dev/null)
+                        [ -z "$supplier" ] && supplier="NOASSERTION"
+                        downloadLocation=$(rpm -q --qf '%{URL}' "$pkg" 2>/dev/null)
+                        [ -z "$downloadLocation" ] && downloadLocation="NOASSERTION"
+                        found_pkg=true
+                    fi
                 fi
             fi
-
-            # Try DPKG-based lookup if not found by RPM
             if [ "$found_pkg" = false ] && command -v dpkg-query &>/dev/null; then
-                pkg=$(dpkg -S "$sofile" 2>/dev/null | head -1 | cut -d: -f1)
+                pkg=$(dpkg-query -S "$sofile" 2>/dev/null | head -1 | cut -d: -f1)
                 if [ -n "$pkg" ]; then
                     version=$(dpkg-query -W -f='${Version}' "$pkg" 2>/dev/null)
+                    # Try apt-cache first
                     license=$(apt-cache show "$pkg" 2>/dev/null | grep -i '^License:' | head -1 | cut -d' ' -f2-)
-                    [ -z "$license" ] && license="Unknown"
+                    # If not found, try /usr/share/doc
+                    if [ -z "$license" ] && [ -f "/usr/share/doc/$pkg/copyright" ]; then
+                        license=$(grep -m1 -i '^License:' "/usr/share/doc/$pkg/copyright" | awk '{print $2}')
+                        if [ -z "$license" ]; then
+                            license=$(awk '/^License:/{getline; while($0 ~ /^ / || $0 == ""){print; getline}}' "/usr/share/doc/$pkg/copyright" | head -1 | tr -d '\n')
+                        fi
+                    fi
+                    [ -z "$license" ] && license="NOASSERTION"
+                    supplier=$(apt-cache show "$pkg" 2>/dev/null | grep -i '^Maintainer:' | head -1 | cut -d' ' -f2-)
+                    [ -z "$supplier" ] && supplier="NOASSERTION"
+                    downloadLocation=$(apt-cache show "$pkg" 2>/dev/null | grep -i '^Homepage:' | head -1 | cut -d' ' -f2-)
+                    [ -z "$downloadLocation" ] && downloadLocation="NOASSERTION"
                     found_pkg=true
                 fi
             fi
-
-            # Calculate SHA256 hash
-            hash=$(sha256sum "$sofile" 2>/dev/null | awk '{print $1}')
-            [ -z "$hash" ] && hash="N/A"
-
-            # Only add to SBOM if a package was found
             if [ "$found_pkg" = true ]; then
-                if jq -e --arg name "$so_name" '.dependencies.libraries[] | select(.name == $name)' "$sbom_file" > /dev/null; then
-                    # Update version/license/hash if possible
-                    jq --arg name "$so_name" --arg version "$version" --arg license "$license" --arg hash "$hash" '
-                      .dependencies.libraries |= map(if .name == $name then .version = $version | .license = $license | .hash = $hash else . end)
-                    ' "$sbom_file" > "${sbom_file}.tmp" && mv "${sbom_file}.tmp" "$sbom_file"
-                else
-                    jq --arg name "$so_name" --arg version "$version" --arg license "$license" --arg hash "$hash" '.dependencies.libraries += [{"name": $name, "version": $version, "license": $license, "hash": $hash}]' "$sbom_file" > "${sbom_file}.tmp" && mv "${sbom_file}.tmp" "$sbom_file"
-                fi
+                jq --arg name "$so_name" \
+                   --arg version "$version" \
+                   --arg license "$license" \
+                   --arg pkg "$pkg" \
+                   --arg supplier "$supplier" \
+                   --arg downloadLocation "$downloadLocation" \
+                   '.packages += [{
+                      name: $name,
+                      SPDXID: ("SPDXRef-Package-" + $name),
+                      versionInfo: $version,
+                      downloadLocation: $downloadLocation,
+                      licenseConcluded: $license,
+                      licenseDeclared: $license,
+                      supplier: $supplier,
+                      externalRefs: [{
+                        referenceCategory: "PACKAGE-MANAGER",
+                        referenceType: "purl",
+                        referenceLocator: $pkg
+                      }]
+                    }]' "$sbom_file" > "${sbom_file}.tmp" && mv "${sbom_file}.tmp" "$sbom_file"
             fi
         done
     fi
 
-    # Add PostgreSQL as a dependency if not already present
-    if ! jq -e '.dependencies.libraries[] | select(.name == "postgresql")' "$sbom_file" > /dev/null; then
-        jq '.dependencies.libraries += [{
-            "name": "postgresql",
-            "version": "'"$pgFullVersion"'",
-            "license": "PostgreSQL",
-            "hash": "N/A"
-        }]' "$sbom_file" > "${sbom_file}.tmp" && mv "${sbom_file}.tmp" "$sbom_file"
-    fi
+    echo "SPDX SBOM (enriched) generated successfully at $sbom_file"
 
-    # Clean up temporary file
-    rm -f "$temp_sbom"
+    # Generate a human-readable JSON file (pretty-printed, without 'spdx' in the name)
+    #readable_file="${sbom_file/-sbom.spdx.json/-sbom.json}"
+    #jq . "$sbom_file" > "$readable_file"
+    #echo "Human-readable SBOM written to $readable_file"
 
-    echo "SBOM generated successfully at $sbom_file"
-
-    # Check for empty or invalid SBOM files
     if [ ! -s "$sbom_file" ]; then
-        echo "Warning: SBOM file is empty or not valid JSON. Check above for details."
+        echo "Error: Final SBOM file $sbom_file is missing or empty."
+        exit 1
     fi
+    echo "Final SBOM file $sbom_file exists and is not empty."
 
-    # Check for errors after the Syft command
-    jq_status=$?
-    # echo "jq exit code: $jq_status"
-    if [ $jq_status -ne 0 ]; then
-        echo "jq failed. Check above for details."
-        return 1
-    fi
+    # Ensure all PostgreSQL-related packages have PostgreSQL license
+    jq '(.packages[] | select(.name | test("postgresql"))) |= (.licenseConcluded = "PostgreSQL" | .licenseDeclared = "PostgreSQL")' \
+       "$sbom_file" > "${sbom_file}.tmp" && mv "${sbom_file}.tmp" "$sbom_file"
 
+    # Ensure the main component (if it is PostgreSQL) has PostgreSQL license
+    jq --arg component "$component_name" \
+       '(.packages[] | select(.name == $component)) |= (.licenseConcluded = "PostgreSQL" | .licenseDeclared = "PostgreSQL")' \
+       "$sbom_file" > "${sbom_file}.tmp" && mv "${sbom_file}.tmp" "$sbom_file"
+
+    # Set supplier to pgEdge for our own components (postgresql, spock, lolor, snowflake, and the main component)
+    jq --arg component "$component_name" \
+       '(.packages[] | select((.name | test("postgresql|spock|lolor|snowflake")) or (.name == $component))) |= (.supplier = "pgEdge")' \
+       "$sbom_file" > "${sbom_file}.tmp" && mv "${sbom_file}.tmp" "$sbom_file"
+
+    # Add checksums to files
+    for file in $(jq -r '.files[].fileName' "$sbom_file"); do
+        sha1=$(sha1sum "$file" 2>/dev/null | awk '{print $1}')
+        [ -z "$sha1" ] && continue
+        jq --arg file "$file" --arg sha1 "$sha1" \
+            '(.files[] | select(.fileName == $file).checksums[] | select(.algorithm == "SHA1")).checksumValue = $sha1' \
+            "$sbom_file" > "${sbom_file}.tmp" && mv "${sbom_file}.tmp" "$sbom_file"
+    done
+
+    # Set documentDescribes to the SPDXID of the first package (simple fallback)
+    root_spdxid=$(jq -r '.packages[0].SPDXID' "$sbom_file")
+    jq --arg root "$root_spdxid" \
+       --arg comment "SBOM for $component_name built by pgEdge" \
+       '.documentDescribes = [$root] | .documentComment = $comment' \
+       "$sbom_file" > "${sbom_file}.tmp" && mv "${sbom_file}.tmp" "$sbom_file"
 } 
