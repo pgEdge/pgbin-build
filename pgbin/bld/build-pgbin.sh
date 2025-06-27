@@ -325,6 +325,7 @@ function createBundle {
 
 	# Generate SBOM for the server before packaging
 	generate_sbom "$Tar" "$baseDir/$workDir/build/$Tar"
+	#generate_grype_sbom "$Tar" "$baseDir/$workDir/build/$Tar"
 
 	Cmd="tar -czf $Tar.tgz $Tar $bndlPrfx-$pgSrcV-$pgBldV-$OS"
 
@@ -338,6 +339,8 @@ function createBundle {
 	else
 		mkdir -p $archiveDir/$workDir
 		mv "$Tar.tgz" $archiveDir/$workDir/
+
+                scan_tarball_with_grype "$archiveDir/$workDir/$Tar.tgz"
 
                 pgcomp=/opt/pgcomponent
 		if [ ! -d $pgcomp ]; then

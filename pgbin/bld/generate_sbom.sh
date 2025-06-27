@@ -195,4 +195,117 @@ function generate_sbom {
        --arg comment "SBOM for $component_name built by pgEdge" \
        '.documentDescribes = [$root] | .documentComment = $comment' \
        "$sbom_file" > "${sbom_file}.tmp" && mv "${sbom_file}.tmp" "$sbom_file"
+}
+
+# generate_grype_sbom <component_name> <build_location>
+function generate_grype_sbom {
+    local component_name="$1"
+    local build_location="$2"
+    local sbom_file="$build_location/${component_name}-grype-sbom.cyclonedx.json"
+
+    # Check if grype is installed
+    if ! command -v grype &> /dev/null; then
+        echo "grype is not installed. Installing grype..."
+        curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sudo sh -s -- -b /usr/local/bin
+    fi
+
+    echo "Generating CycloneDX SBOM with grype for $component_name..."
+    grype "$build_location" -o cyclonedx-json > "$sbom_file"
+    if [ $? -ne 0 ]; then
+        echo "Error: grype failed to generate CycloneDX SBOM."
+        return 1
+    fi
+    echo "Grype CycloneDX SBOM generated at $sbom_file"
+    # Optionally, print a summary of the grype scan
+    grype "$build_location"
+    # Scan system libraries in the build's lib directory for vulnerabilities
+    scan_libs_with_grype "$build_location"
+}
+
+# scan_libs_with_grype <build_location>
+function scan_libs_with_grype {
+    local build_location="$1"
+    if ! command -v rpm &> /dev/null; then
+        echo "rpm is not installed. Skipping system library vulnerability scan."
+        return 1
+    fi
+    if ! command -v grype &> /dev/null; then
+        echo "grype is not installed. Skipping system library vulnerability scan."
+        return 1
+    fi
+    if ! command -v repoquery &> /dev/null; then
+        echo "repoquery is not installed. Installing dnf-plugins-core..."
+        sudo dnf install -y dnf-plugins-core
+    fi
+    local tmpdir=$(mktemp -d)
+    echo "Scanning system libraries in $build_location/lib with grype..."
+    for sofile in "$build_location/lib/"*.so*; do
+        [ -e "$sofile" ] || continue
+        so_name=$(basename "$sofile")
+        sysfile="/lib64/$so_name"
+        if [ -f "$sysfile" ]; then
+            pkg=$(rpm -qf "$sysfile" 2>/dev/null)
+            if [[ "$pkg" != *"is not owned by any package"* ]]; then
+                echo "\n--- Scanning $pkg (for $so_name) ---" | tee -a "$build_location/system-libs-vuln-report.txt"
+                rpmfile=$(repoquery --location "$pkg" 2>/dev/null | head -1)
+                cd "$tmpdir"
+                localfile=""
+                if [ -n "$rpmfile" ]; then
+                    if [[ "$rpmfile" =~ ^https?:// ]]; then
+                        curl -O "$rpmfile"
+                        localfile=$(basename "$rpmfile")
+                    fi
+                fi
+                # Fallback to dnf download if curl did not succeed
+                if [ ! -f "$localfile" ]; then
+                    dnf download "$pkg" || true
+                    localfile=$(ls -t *.rpm 2>/dev/null | head -1)
+                fi
+                if [ -f "$localfile" ]; then
+                    grype "$localfile" -o table >> "$build_location/system-libs-vuln-report.txt"
+                else
+                    echo "Failed to download RPM for $pkg, skipping grype scan." | tee -a "$build_location/system-libs-vuln-report.txt"
+                    echo "$pkg" >> "$build_location/missing-grype-rpms.txt"
+                fi
+                cd - > /dev/null
+            else
+                echo "$so_name is not owned by any RPM package." | tee -a "$build_location/system-libs-vuln-report.txt"
+            fi
+        else
+            echo "$so_name not found in /lib64." | tee -a "$build_location/system-libs-vuln-report.txt"
+        fi
+    done
+    # Scan pip packages if available
+    # if command -v pip &> /dev/null; then
+    #     echo -e "\n--- Scanning pip packages ---" >> "$build_location/system-libs-vuln-report.txt"
+    #     pip freeze > "$tmpdir/requirements.txt"
+    #     grype pip:$(realpath "$tmpdir/requirements.txt") -o table >> "$build_location/system-libs-vuln-report.txt"
+    # fi
+    rm -rf "$tmpdir"
+}
+
+# scan_tarball_with_grype <tarball_path>
+function scan_tarball_with_grype {
+    local tarball_path="$1"
+    if [ ! -f "$tarball_path" ]; then
+        echo "Error: Tarball $tarball_path does not exist."
+        return 1
+    fi
+    if ! command -v grype &> /dev/null; then
+        echo "grype is not installed. Installing grype..."
+        curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sudo sh -s -- -b /usr/local/bin
+    fi
+    local tmpdir
+    tmpdir=$(mktemp -d)
+    tar -xzf "$tarball_path" -C "$tmpdir"
+    local report_file="${tarball_path%.tgz}.grype-report.txt"
+    echo "Scanning extracted tarball contents in $tmpdir with grype..."
+    grype "$tmpdir" -o table > "$report_file"
+    local grype_status=$?
+    rm -rf "$tmpdir"
+    if [ $grype_status -ne 0 ]; then
+        echo "Error: grype failed to scan extracted tarball."
+        return 1
+    fi
+    echo "Grype scan report written to $report_file"
 } 
