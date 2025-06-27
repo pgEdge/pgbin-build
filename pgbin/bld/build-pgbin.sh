@@ -1,3 +1,5 @@
+# Source the common SBOM generator
+source "$(dirname "$0")/generate_sbom.sh"
 
 set -e
 # set -x
@@ -321,6 +323,10 @@ function createBundle {
 
 	Tar="$bndlPrfx-$pgSrcV-$pgBldV-$OS"
 
+	# Generate SBOM for the server before packaging
+	generate_sbom "$Tar" "$baseDir/$workDir/build/$Tar"
+	#generate_grype_sbom "$Tar" "$baseDir/$workDir/build/$Tar"
+
 	Cmd="tar -czf $Tar.tgz $Tar $bndlPrfx-$pgSrcV-$pgBldV-$OS"
 
 	tar_log=$baseDir/$workDir/logs/tar.log
@@ -333,6 +339,8 @@ function createBundle {
 	else
 		mkdir -p $archiveDir/$workDir
 		mv "$Tar.tgz" $archiveDir/$workDir/
+
+                scan_tarball_with_grype "$archiveDir/$workDir/$Tar.tgz"
 
                 pgcomp=/opt/pgcomponent
 		if [ ! -d $pgcomp ]; then
