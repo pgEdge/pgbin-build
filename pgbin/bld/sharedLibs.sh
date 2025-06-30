@@ -63,6 +63,10 @@ function linuxCopySharedLibs {
   cp -Pv $lib/libgcrypt*.so*    $shared_lib/.
   cp -Pv $lib/libmount*.so*     $shared_lib/.
 
+  if [ -e "$lib/libeconf.so.0" ]; then
+    cp -Pv $lib/libeconf.so*    $shared_lib/.
+  fi
+
   ##cp -Pv $lib/libdl*.so*      $shared_lib/.
   ##cp -Pv $lib/libtinfo*         $shared_lib/.
   ##cp -Pv $lib/libpcre2-8*.so*   $shared_lib/.
