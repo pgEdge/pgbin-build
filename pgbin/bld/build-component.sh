@@ -206,10 +206,9 @@ function configureComp {
     fi
 
     if [ "$comp" == "backrest" ]; then
-        echo "# configure backrest..."
-        export LD_LIBRARY_PATH=$buildLocation/lib
-        cd src
-        ./configure --enable-debug --prefix=$buildLocation LDFLAGS="$LDFLAGS -Wl,-rpath,$sharedLibs" >> $make_log 2>&1 
+        export PKG_CONFIG_PATH=$pgBin/lib/pkgconfig:$PKG_CONFIG_PATH
+        mkdir -p build
+        meson setup build --prefix=$buildLocation -Dc_link_args="-Wl,-rpath,$sharedLibs" >> $make_log 2>&1
         rc=$?
     fi
 
@@ -232,7 +231,8 @@ function configureComp {
 
     if [ "$comp" == "postgis" ]; then
         echo "# configure postgis..."
-	export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
+        export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
+        ./autogen.sh
         ./configure --prefix=$buildLocation --without-raster --enable-debug LDFLAGS="$LDFLAGS -Wl,-rpath,$sharedLibs" > $make_log 2>&1
         rc=$?
     fi
@@ -296,26 +296,37 @@ function buildComp {
             export PYTHON_OVERRIDE=python3.9
         fi
 
-        echo "#  @`date`  make -j $CORES"
-        USE_PGXS=1 $make -j $CORES >> $make_log 2>&1
+	if [ "$comp" == "backrest" ]; then
+            export PKG_CONFIG_PATH=$pgBin/lib/pkgconfig:$PKG_CONFIG_PATH
+            meson compile -C build >> $make_log 2>&1
+	else
+            echo "#  @`date`  make -j $CORES"
+            USE_PGXS=1 $make -j $CORES >> $make_log 2>&1
+	fi
         rc=$?
         echo "  rc = $rc"
         if [ "$rc" == "0" ] || [ "$comp" == "plv8" ]; then
-                echo "#  @`date`  make install..."
-                USE_PGXS=1 $make_install > $install_log 2>&1
-                if [[ $? -ne 0 ]]; then
-                        echo " "
-                        echo "ERROR: Install failed, check install_log"
-                        tail -20 $install_log
-                        echo ""
-                        return 1
-                fi
+
+            if [ "$comp" == "backrest" ]; then
+                 echo "#  @`date`  meson install..."
+                 meson install -C build >> $install_log 2>&1
+            else
+                 echo "#  @`date`  make install..."
+                 USE_PGXS=1 $make_install > $install_log 2>&1
+            fi
+            if [[ $? -ne 0 ]]; then
+                 echo " "
+                 echo "ERROR: Install failed, check install_log"
+                 tail -20 $install_log
+                 echo ""
+                 return 1
+            fi
         else
-                echo " "
-                echo "ERROR: Make failed, check make_log"
-                echo " "
-                tail -20 $make_log
-                return 1
+            echo " "
+            echo "ERROR: Make failed, check make_log"
+            echo " "
+            tail -20 $make_log
+            return 1
         fi
 
         if [ "$comp" == "multicorn" ]; then

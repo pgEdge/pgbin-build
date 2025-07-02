@@ -34,7 +34,7 @@ decoderbufsFullV=1.7.0
 decoderbufsShortV=
 decoderbufsBuildV=1
 
-backrestFullV=2.53.1
+backrestFullV=2.55.1
 backrestShortV=
 backrestBuildV=1
 
@@ -42,7 +42,7 @@ multicornFullV=3.0beta1
 multicornShortV=
 multicornBuildV=1
 
-citusFullV=12.1.5
+citusFullV=13.1.0
 citusShortV=
 citusBuildV=1
 
@@ -54,11 +54,11 @@ hypopgFullV=1.4.1
 hypopgShortV=
 hypopgBuildV=1
 
-postgisFullV=3.5.0
+postgisFullV=3.5.3
 postgisShortV=
-postgisBuildV=3
+postgisBuildV=1
 
-orafceFullV=4.13.4
+orafceFullV=4.14.4
 orafceShortV=
 orafceBuildV=1
 
@@ -78,9 +78,9 @@ debugFullV=1.8
 debugShortV=
 debugBuildV=1
 
-auditFull15V=1.7.0
-auditFull16V=16.0
-auditFull17V=17.0
+auditFull15V=1.7.1
+auditFull16V=16.1
+auditFull17V=17.1
 auditShortV=
 auditBuildV=1
 
