@@ -2,6 +2,9 @@
 
 ##set -x
 
+# Source the common SBOM generator
+source "$(dirname "$0")/generate_sbom.sh"
+
 source ./versions.sh
 buildOS=$OS
 buildNumber=1
@@ -89,10 +92,14 @@ function  packageComponent {
 	echo "$bundle"
 
 	cd "$baseDir/$workDir/build/"
+	generate_sbom "$componentBundle" "$baseDir/$workDir/build/$componentBundle"
+	#generate_grype_sbom "$componentBundle" "$baseDir/$workDir/build/$componentBundle"
 	tar -czf "$componentBundle.tgz" $componentBundle
 	rm -rf "$targetDir/$workDir"
 	mkdir -p "$targetDir/$workDir"
 	mv "$componentBundle.tgz" "$targetDir/$workDir/"
+
+	scan_tarball_with_grype "$targetDir/$workDir/$componentBundle.tgz"
 
 	if [ "$copyBin" == "true" ]; then
 		cp -pv $bundle $IN/postgres/$compDir/.
