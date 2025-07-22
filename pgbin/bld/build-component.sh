@@ -4,6 +4,7 @@
 
 # Source the common SBOM generator
 source "$(dirname "$0")/generate_sbom.sh"
+source "$(dirname "$0")/generate_debug_symbols.sh"
 
 source ./versions.sh
 buildOS=$OS
@@ -94,6 +95,8 @@ function  packageComponent {
 	cd "$baseDir/$workDir/build/"
 	generate_sbom "$componentBundle" "$baseDir/$workDir/build/$componentBundle"
 	#generate_grype_sbom "$componentBundle" "$baseDir/$workDir/build/$componentBundle"
+	generateDebugSymbols "$baseDir/$workDir/build/$componentBundle"
+
 	tar -czf "$componentBundle.tgz" $componentBundle
 	rm -rf "$targetDir/$workDir"
 	mkdir -p "$targetDir/$workDir"
