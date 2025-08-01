@@ -472,7 +472,7 @@ function buildTimeScaleDBComponent {
         packageComponent $componentBundle
 }
 
-TEMP=`getopt -l no-tar, copy-bin,no-copy-bin,with-pgver:,with-pgbin:,build-curl:,build-hypopg:,build-postgis:,build-sqlitefdw:,build-orafce:,build-audit:,build-setuser:,build-permissions:,build-partman:,build-pldebugger:,build-pljava:,build-plv8:,build-plprofiler:,build-backrest:,build-spock33:,build-spock40:,build-spock50:,build-snowflake:,build-wal2json:,build-hintplan:,build-timescaledb:,build-cron:,build-citus:,build-vector:,build-bouncer: -- "$@"`
+TEMP=`getopt -l no-tar, copy-bin,no-copy-bin,with-pgver:,with-pgbin:,build-curl:,build-hypopg:,build-postgis:,build-sqlitefdw:,build-orafce:,build-audit:,build-setuser:,build-permissions:,build-partman:,build-pldebugger:,build-pljava:,build-plv8:,build-plprofiler:,build-backrest:,build-spock33:,build-spock40:,build-spock50:,build-spock60:,build-snowflake:,build-wal2json:,build-hintplan:,build-timescaledb:,build-cron:,build-citus:,build-vector:,build-bouncer: -- "$@"`
 
 if [ $? != 0 ] ; then
 	echo "Required parameters missing, Terminating..."
@@ -507,6 +507,7 @@ while true; do
     --build-spock33 ) buildSpock33=true; Source=$2; shift; shift ;;
     --build-spock40 ) buildSpock40=true; Source=$2; shift; shift ;;
     --build-spock50 ) buildSpock50=true; Source=$2; shift; shift ;;
+    --build-spock60 ) buildSpock60=true; Source=$2; shift; shift ;;
     --build-lolor )   buildLolor=true; Source=$2; shift; shift ;;
     --build-wal2json ) buildWal2Json=true; Source=$2; shift; shift ;;
     --build-hintplan ) buildHintPlan=true; Source=$2; shift; shift ;;
@@ -609,6 +610,10 @@ fi
 
 if [[ $buildSpock50 == "true" ]]; then
 	buildComp spock50  "" "$spock50V" "$spockBld50V" "$Source"
+fi
+
+if [[ $buildSpock60 == "true" ]]; then
+	buildComp spock60  "" "$spock60V" "$spockBld60V" "$Source"
 fi
 
 if [[ $buildLolor == "true" ]]; then
