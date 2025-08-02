@@ -199,6 +199,20 @@ function updateSharedLibs {
           cp -P $lib64/libssh*.so* $shared_lib/.
           cp -P $lib64/libpsl*.so* $shared_lib/.
           cp -P $lib64/libbrotli*.so* $shared_lib/.
+        elif [ "$comp" == "backrest" ]; then
+          cp -P $lib64/libcrypto*  $shared_lib/.
+          cp -P $lib64/libssl*  $shared_lib/.
+          cp -P $lib64/libldap*  $shared_lib/.
+          cp -P $lib64/liblber*  $shared_lib/.
+          cp -P $lib64/libsasl2* $shared_lib/.
+
+          # Use latest released PostgreSQL libpq
+          pg_dir="/opt/pgcomponent/pg17"
+          if [ ! -d "$pg_dir" ]; then
+            echo "Error: PostgreSQL 17 directory not found at $pg_dir"
+            return 1
+          fi
+          cp -P "$pg_dir/lib/libpq"* $shared_lib/.
         fi
 }
 
