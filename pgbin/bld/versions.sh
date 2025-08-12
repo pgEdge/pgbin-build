@@ -1,41 +1,41 @@
 #!/bin/bash
 
 lolorV=1.2
-lolorBldV=1
+lolorBldV=2
 
 spock60V=6.0.0-devel
 spockBld60V=1
 
 spock50V=5.0.0
-spockBld50V=1
+spockBld50V=2
 
 spock40V=4.0.10
-spockBld40V=1
+spockBld40V=2
 
 spock33V=3.3.6
 spockBld33V=1
 
-pg17V=17.5
-pg17BuildV=2
+pg17V=17.6
+pg17BuildV=1
 
-pg16V=16.9
-pg16BuildV=2
+pg16V=16.10
+pg16BuildV=1
 
-pg15V=15.13
-pg15BuildV=2
+pg15V=15.14
+pg15BuildV=1
 
 snwflkV=2.2
-snwflkBldV=1
+snwflkBldV=2
 
 wal2jV=2.6.0
-wal2jBldV=1
+wal2jBldV=2
 
-bouncerV=1.23.1
+bouncerV=1.24.1
 bouncerBldV=1
 
 decoderbufsFullV=1.7.0
 decoderbufsShortV=
-decoderbufsBuildV=1
+decoderbufsBuildV=2
 
 backrestFullV=2.56.0
 backrestShortV=
@@ -51,11 +51,11 @@ citusBuildV=1
 
 vectorFullV=0.8.0
 vectorShortV=
-vectorBuildV=1
+vectorBuildV=2
 
 hypopgFullV=1.4.1
 hypopgShortV=
-hypopgBuildV=1
+hypopgBuildV=2
 
 postgisFullV=3.5.3
 postgisShortV=
@@ -67,19 +67,19 @@ orafceBuildV=1
 
 sqlitefdwFullV=2.4.0
 sqlitefdwShortV=
-sqlitefdwBuildV=1
+sqlitefdwBuildV=2
 
 plProfilerFullVersion=4.2.5
 plProfilerShortVersion=
-plprofilerBuildV=1
+plprofilerBuildV=2
 
 plv8FullV=3.2.3
 plv8ShortV=
-plv8BuildV=1
+plv8BuildV=2
 
 debugFullV=1.8
 debugShortV=
-debugBuildV=1
+debugBuildV=2
 
 auditFull15V=1.7.1
 auditFull16V=16.1
@@ -89,33 +89,33 @@ auditBuildV=1
 
 setuserFullV=4.1.0
 setuserShortV=
-setuserBuildV=1
+setuserBuildV=2
 
 permissionsFullV=1.3
 permissionsShortV=
-permissionsBuildV=1
+permissionsBuildV=2
 
 pljavaFullV=1.6.6
 pljavaShortV=
-pljavaBuildV=1
+pljavaBuildV=2
 
 partmanFullV=5.0.1
 partmanShortV=
-partmanBuildV=1
+partmanBuildV=2
 
 hintplan17V=1.7.0
 hintplan16V=1.6.1
 hintplan15V=1.5.2
 hintplanShortV=
-hintplanBuildV=1
+hintplanBuildV=2
 
 timescaledbFullV=2.17.0
 timescaledbShortV=
-timescaledbBuildV=1
+timescaledbBuildV=2
 
 cronFullV=1.6.4
 cronShortV=
-cronBuildV=1
+cronBuildV=2
 
 isEL=no
 isEL8=no
