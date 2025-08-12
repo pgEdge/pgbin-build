@@ -446,6 +446,7 @@ function buildTimeScaleDBComponent {
         echo "#   compNm: $componentName"
         mkdir -p "$baseDir/$workDir/logs"
         cd "$baseDir/$workDir"
+	rm -rf timescaledb
         mkdir timescaledb && tar -xf $timescaleDBSource --strip-components=1 -C timescaledb
         cd timescaledb
 

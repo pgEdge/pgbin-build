@@ -7,8 +7,10 @@ function bcc {
   rc1=$?
   $bac $1 16 --copy-bin
   rc2=$?
+  $bac $1 17 --copy-bin
+  rc3=$?
 
-  if [ "$rc1" == "0" ] && [ "$rc2" == "0" ]; then
+  if [ "$rc1" == "0" ] && [ "$rc2" == "0" ] && [ "$rc3" == "0" ]; then
     return
   fi
 
