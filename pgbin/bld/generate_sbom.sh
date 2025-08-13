@@ -5,7 +5,8 @@ function generate_sbom {
     local component_name="$1"
     local build_location="$2"
     local sbom_file="$build_location/${component_name}-sbom.spdx.json"
-    
+    local sbom_file_asc="$build_location/${component_name}-sbom.spdx.json.asc"
+
     # Check if syft is installed
     if ! command -v syft &> /dev/null; then
         echo "Warning: syft is not installed. Installing syft..."
@@ -195,6 +196,9 @@ function generate_sbom {
        --arg comment "SBOM for $component_name built by pgEdge" \
        '.documentDescribes = [$root] | .documentComment = $comment' \
        "$sbom_file" > "${sbom_file}.tmp" && mv "${sbom_file}.tmp" "$sbom_file"
+
+    KEY_ID=$(gpg --list-secret-keys --with-colons | awk -F: '/^sec/{print $5}' | head -n 1); export KEY_ID
+    gpg --armor --detach-sign --output ${sbom_file_asc} ${sbom_file} || exit 1
 }
 
 # generate_grype_sbom <component_name> <build_location>
