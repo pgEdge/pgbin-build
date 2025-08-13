@@ -371,6 +371,7 @@ function buildPlJavaComponent {
 	mkdir -p "$baseDir/$workDir/logs"
 	cd "$baseDir/$workDir"
 	echo "#        Source = $Source"
+	rm -rf pljava
 	mkdir pljava && tar -xf $Source --strip-components=1 -C pljava
 	cd pljava
 	buildLocation="$baseDir/$workDir/build/$componentName"
@@ -407,6 +408,7 @@ function buildPlProfilerComponent {
 	componentName="plprofiler$plProfilerShortVersion-pg$pgShortVersion-$plProfilerFullVersion-$plprofilerBuildV-$buildOS"
 	mkdir -p "$baseDir/$workDir/logs"
 	cd "$baseDir/$workDir"
+	rm -rf plprofiler
 	mkdir plprofiler && tar -xf $plProfilerSource --strip-components=1 -C plprofiler
 	cd plprofiler
 
