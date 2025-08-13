@@ -21,8 +21,10 @@ function bpc {
 
 bpc lolor
 bpc spock40
+bpc spock50
+bpc spock60
 bpc snowflake
 
-bpc spock33
+#bpc spock33
 
 exit 0
