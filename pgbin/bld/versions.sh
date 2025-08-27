@@ -9,8 +9,8 @@ spockBld60V=1
 spock50V=5.0.1
 spockBld50V=1
 
-spock40V=4.0.10
-spockBld40V=2
+spock40V=4.0.11
+spockBld40V=1
 
 spock33V=3.3.6
 spockBld33V=1
