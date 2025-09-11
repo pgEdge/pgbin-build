@@ -47,7 +47,7 @@ function export_patches {
   git checkout $SPOCK_BRANCH
   git pull
 
-  dp=$dir/patches
+  dp=$dir/patches/$majorV
   export_patch DIFF1 "$dp" "$1"
   export_patch DIFF2 "$dp" "$2"
   export_patch DIFF3 "$dp" "$3"
