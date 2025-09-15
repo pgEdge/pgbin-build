@@ -24,8 +24,8 @@ copyBin="$3"
 if [ "$copyBin" == "" ]; then
   copyBin="--no-copy-bin"
 fi
-if [[ "$pgV" < "12" ]] || [[ "$pgV" > "17" ]]; then
-  echo  "ERROR: second parm must be 12 thru 17"
+if [[ "$pgV" < "15" ]] || [[ "$pgV" > "18" ]]; then
+  echo  "ERROR: second parm must be 15 thru 18"
   exit 1
 fi
 
