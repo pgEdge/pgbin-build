@@ -78,7 +78,15 @@ function checkPostgres {
 	else
 		pgSrcV=`$pgSrcDir/configure --version | head -1 | awk '{print $3}'`
 		echo "pgSrcV=$pgSrcV/rc"
-		if [[ "${pgSrcV/rc}" =~ ^17.* ]]; then
+		if [[ "${pgSrcV/rc}" =~ ^18.* ]]; then
+			pgShortV="18"
+			bndlPrfx=pg18
+			if [ "$OS" == "osx" ]; then
+				pgOPT="--without-icu"
+			else
+				pgOPT="--with-zstd --with-lz4 --with-icu"
+			fi
+		elif [[ "${pgSrcV/rc}" =~ ^17.* ]]; then
 			pgShortV="17"
 			bndlPrfx=pg17
 			if [ "$OS" == "osx" ]; then
@@ -136,7 +144,7 @@ function buildPostgres {
 
         pgS="$pgShortV"
 
-	if [ $pgS == "15" ] || [ $pgS == "16" ] || [ $pgS == "17" ]; then
+	if [ $pgS == "15" ] || [ $pgS == "16" ] || [ $pgS == "17" ] || [ $pgS == "18" ]; then
 		patcher "$DIFF1"
 		patcher "$DIFF2"
 		patcher "$DIFF3"

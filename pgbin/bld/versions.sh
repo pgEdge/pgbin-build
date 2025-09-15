@@ -15,6 +15,9 @@ spockBld40V=1
 spock33V=3.3.6
 spockBld33V=1
 
+pg18V=18.0-rc1
+pg18BuildV=1
+
 pg17V=17.6
 pg17BuildV=1
 
