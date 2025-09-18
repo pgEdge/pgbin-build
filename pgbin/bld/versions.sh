@@ -6,7 +6,7 @@ lolorBldV=2
 spock60V=6.0.0-devel
 spockBld60V=1
 
-spock50V=5.0.1
+spock50V=5.0.2
 spockBld50V=1
 
 spock40V=4.0.11
