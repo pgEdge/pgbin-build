@@ -92,39 +92,35 @@ if [ "$majorV" == "15" ]; then
 
   p1=pg15-010-allow_logical_decoding_on_standbys.diff
   p2=pg15-015-attoptions.diff
-  p3=pg15-020-LOG-to-DEBUG1.diff
-  p4=pg15-025-logical_commit_clock.diff
-  p5=pg15-030-per-subtrans-commit-ts.diff
+  p3=pg15-025-logical_commit_clock.diff
+  p4=pg15-030-per-subtrans-commit-ts.diff
 
 elif [ "$majorV" == "16" ]; then
   pgV=$pg16V
   pgBuildV=$pg16BuildV
 
   p1=pg16-015-attoptions.diff
-  p2=pg16-020-LOG-to-DEBUG1.diff
-  p3=pg16-025-logical_commit_clock.diff
-  p4=pg16-030-per-subtrans-commit-ts.diff
+  p2=pg16-025-logical_commit_clock.diff
+  p3=pg16-030-per-subtrans-commit-ts.diff
 
 elif [ "$majorV" == "17" ]; then
   pgV=$pg17V
   pgBuildV=$pg17BuildV
 
   p1=pg17-015-attoptions.diff
-  p2=pg17-020-LOG-to-DEBUG1.diff
-  p3=pg17-025-logical_commit_clock.diff
-  p4=pg17-030-per-subtrans-commit-ts.diff
-  p5=pg17-090-init_template_fix.diff
+  p2=pg17-025-logical_commit_clock.diff
+  p3=pg17-030-per-subtrans-commit-ts.diff
+  p4=pg17-090-init_template_fix.diff
 
 elif [ "$majorV" == "18" ]; then
   pgV=$pg18V
   pgBuildV=$pg18BuildV
 
   p1=pg18-015-attoptions.diff
-  p2=pg18-020-LOG-to-DEBUG1.diff
-  p3=pg18-025-logical_commit_clock.diff
-  p4=pg18-030-per-subtrans-commit-ts.diff
-  p5=pg18-035-row-filter-check.diff
-  p6=pg18-090-init_template_fix.diff
+  p2=pg18-025-logical_commit_clock.diff
+  p3=pg18-030-per-subtrans-commit-ts.diff
+  p4=pg18-035-row-filter-check.diff
+  p5=pg18-090-init_template_fix.diff
 
 else
   echo "Yikes!! $majorV"
