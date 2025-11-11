@@ -6,7 +6,7 @@ binBld=/opt/pgbin-build/builds
 source ./versions.sh
 
 SPOCK_REPO=spock
-SPOCK_BRANCH=main
+SPOCK_BRANCH=v5_STABLE
 
 
 function runPgBin {
