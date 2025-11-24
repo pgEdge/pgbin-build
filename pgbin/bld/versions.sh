@@ -27,8 +27,8 @@ pg16BuildV=1
 pg15V=15.15
 pg15BuildV=1
 
-snwflkV=2.2
-snwflkBldV=2
+snwflkV=2.4
+snwflkBldV=1
 
 wal2jV=2.6.0
 wal2jBldV=2
