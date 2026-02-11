@@ -40,7 +40,7 @@ decoderbufsFullV=1.7.0
 decoderbufsShortV=
 decoderbufsBuildV=2
 
-backrestFullV=2.56.0
+backrestFullV=2.58.0
 backrestShortV=
 backrestBuildV=1
 
