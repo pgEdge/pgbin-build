@@ -1,6 +1,6 @@
 #!/bin/bash
 
-lolorV=1.2.1
+lolorV=1.2.2
 lolorBldV=1
 
 spock60V=6.0.0-devel
