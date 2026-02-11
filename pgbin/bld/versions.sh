@@ -52,9 +52,9 @@ citusFullV=13.1.0
 citusShortV=
 citusBuildV=1
 
-vectorFullV=0.8.0
+vectorFullV=0.8.1
 vectorShortV=
-vectorBuildV=2
+vectorBuildV=1
 
 hypopgFullV=1.4.1
 hypopgShortV=
