@@ -1,12 +1,12 @@
 #!/bin/bash
 
-lolorV=1.2.2
+lolorV=1.2.3
 lolorBldV=1
 
 spock60V=6.0.0-devel
 spockBld60V=1
 
-spock50V=5.0.12
+spock50V=5.0.13
 spockBld50V=1
 
 spock40V=4.0.11
